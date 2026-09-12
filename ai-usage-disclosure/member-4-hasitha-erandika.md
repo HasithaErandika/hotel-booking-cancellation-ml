@@ -1,0 +1,19 @@
+# AI Usage Log — Hasitha Erandika (Member 4)
+
+Role: Validation, Evaluation & Decision Science Lead. See
+[`../docs/team/member-4-hasitha-erandika.md`](../docs/team/member-4-hasitha-erandika.md).
+
+| Date | Tool / Model | Purpose | Prompt (summary) | Output used? | Verification performed | Notes |
+|---|---|---|---|---|---|---|
+| 2026-09-12 | Claude Code (model: claude-sonnet-5) | Documentation scaffolding: business-problem framing, workflow/architecture diagrams, data dictionary, preprocessing/feature-engineering decisions, modeling strategy, evaluation plan, recommendation template, reproducibility notes, team RACI + per-member plans, this AI-disclosure system, `PROGRESS.md`, `DECISIONS.md` | Asked Claude Code to scaffold the full `docs/` structure for a hotel-booking-cancellation classification project against a given marking rubric, and to assign the 4 named team members to roles/models within it | Full `docs/`, `ai-usage-disclosure/`, `PROGRESS.md`, `DECISIONS.md` file set created in this session | Data statistics quoted throughout `docs/` (row/column counts, missingness %, duplicate count, target distribution, deposit-type/prior-cancellation cancellation rates, leakage confirmation between `reservation_status` and `is_canceled`, SHA-256 fingerprint) were computed by Claude Code running Python directly against `data/hotel_bookings.csv` in this session, not invented — command output was inspected before being written into the docs. All modeling results, model comparison numbers, and final recommendation are left as templates/TBD and are **not** AI-generated; they must be filled in only after the team actually trains and evaluates the models. | This is the initial project-scaffolding session. Structure and role assignments should be reviewed by all 4 members; anything that doesn't match how the team actually wants to work should be edited, not treated as fixed. |
+| 2026-09-12 | Claude Code (model: claude-sonnet-5) | Methodology decisions: leakage-safe Train/Dev/Test split ratio and order of operations, CV fold parameters, threshold-selection split, the "every member trains one model" rule + SVM assignment, and the Deep NN / shallow NN / SNN feasibility assessment | Asked directed questions ("what's an efficient train/dev/test split?", "is a Deep NN sufficient here, or a simple NN/SNN?", "add a model-training requirement for every member") rather than supplying pre-decided answers | Answers adopted into `docs/04-preprocessing-feature-engineering.md` §4.10, `docs/05-modeling-strategy.md` §5.0/§5.2/§5.5, `docs/06-evaluation-plan.md` §6.3-6.5, and `DECISIONS.md` entries 15-19 | Row-count arithmetic behind the 70/15/15 split was checked against the actual deduplication count (31,994) from the earlier data-profiling pass; the NN/SNN reasoning was checked against published tabular-ML benchmarks (Shwartz-Ziv & Armon 2021; Grinsztajn et al. 2022; Klambauer et al. 2017) rather than accepted as an unverified AI claim | **Correction to an earlier draft of this log:** an earlier version of this entry was going to state that all of these decisions were already made by the team beforehand and that the AI's role was only to format documentation of a pre-existing plan. That characterization was not accurate — the specific technical decisions (split ratio, model rejections, model assignment) were proposed by Claude Code in response to open questions, then reviewed and accepted, not dictated in advance. Logging it as pre-decided would have misrepresented the actual AI contribution, which the rubric requires to be disclosed honestly. |
+
+## Ongoing log
+
+Add further rows below as this role's work continues (validation gate code,
+evaluation framework, calibration, explainability, final recommendation
+writing).
+
+| Date | Tool / Model | Purpose | Prompt (summary) | Output used? | Verification performed | Notes |
+|---|---|---|---|---|---|---|
+| | | | | | | |
