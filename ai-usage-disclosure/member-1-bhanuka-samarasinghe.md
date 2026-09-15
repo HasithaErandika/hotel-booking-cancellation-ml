@@ -13,7 +13,7 @@ Role: Data Engineering + EDA Lead, Logistic Regression. See
 
 | Date | Tool / Model | Purpose | Prompt (summary) | Output used? | Verification performed | Notes |
 |---|---|---|---|---|---|---|
-| | | | | | | |
+| 2026-09-15 | Antigravity AI Agent | Data engineering boilerplate & EDA notebook setup | Generate modular data ingestion, cleaning, schema validation scripts, and initial EDA notebook cells | Yes | Tested via Python execution (`src.data` test suite and schema assertions) | Generated `src/data/ingestion.py`, `src/data/cleaning.py`, `src/data/validation.py`, and `notebooks/01_data_quality_eda.ipynb` |
 
 ## Note on the initial docs scaffold
 
