@@ -1,0 +1,21 @@
+statistic,documented,actual,matches
+Rows,119390.0,119390.0,True
+Columns,32.0,32.0,True
+Exact duplicate rows (all columns),31994.0,31994.0,True
+children missing,4.0,4.0,True
+country missing,488.0,488.0,True
+agent missing,16340.0,16340.0,True
+company missing,112593.0,112593.0,True
+agent & company both missing,9760.0,9760.0,True
+Not cancelled (raw),75166.0,75166.0,True
+Cancelled (raw),44224.0,44224.0,True
+City Hotel bookings,79330.0,79330.0,True
+Resort Hotel bookings,40060.0,40060.0,True
+Room type mismatch rows,14917.0,14917.0,True
+Negative adr rows,1.0,1.0,True
+Max adr,5400.0,5400.0,True
+Zero adr rows,1959.0,1959.0,True
+meal Undefined,1169.0,1169.0,True
+market_segment Undefined,2.0,2.0,True
+distribution_channel Undefined,5.0,5.0,True
+Distinct country values (incl. missing),178.0,178.0,True

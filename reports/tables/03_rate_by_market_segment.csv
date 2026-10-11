@@ -1,0 +1,8 @@
+market_segment,n,cancellations,rate,ci_low,ci_high
+Online TA,36000,12719,0.3533,0.3484,0.3583
+Groups,3406,849,0.2493,0.235,0.2641
+Aviation,165,28,0.1697,0.1201,0.2343
+Direct,8313,1230,0.148,0.1405,0.1558
+Offline TA/TO,9711,1415,0.1457,0.1388,0.1529
+Complementary,495,64,0.1293,0.1026,0.1617
+Corporate,2905,331,0.1139,0.1029,0.126

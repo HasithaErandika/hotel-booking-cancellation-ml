@@ -1,14 +1,16 @@
 # 1. Business Problem Framing and Lens/Task Formulation
 
-*Rubric: 5 marks — Foundational Knowledge; Integration | Problem framing; critical thinking*
+*Rubric: 5 marks. Foundational Knowledge; Integration | Problem framing; critical thinking*
 
 ## 1.1 Business context
 
 Hotels accept bookings well in advance of arrival, but a large share of those bookings
 are cancelled before check-in. Cancellations create uncertainty for staffing,
-overbooking strategy, pricing, and revenue forecasting. In our dataset, **37.04%**
-of all bookings (44,224 of 119,390) end in cancellation or no-show — this is not a
-rare event, it is a routine operating condition the hotel has to manage.
+overbooking strategy, pricing, and revenue forecasting. In the raw file, **37.04%**
+of bookings (44,224 of 119,390) end in cancellation or no-show. After removing
+duplicate rows, the modelling data has 87,138 bookings and **27.28%** of them are
+cancelled (23,767). Either way, cancellation is not a rare event. It is a routine
+operating condition the hotel has to manage.
 
 ## 1.2 Stakeholder
 
@@ -23,7 +25,7 @@ allocation), and hotel management (overbooking and cancellation-policy decisions
 > Given the information available at (or shortly after) the time a booking is made,
 > which bookings are at high risk of being cancelled, so that the reservations team
 > can prioritise them for monitoring, confirmation follow-up, or revenue-management
-> action (e.g. overbooking allowance, deposit policy) — **without** turning the score
+> action (e.g. overbooking allowance, deposit policy), **without** turning the score
 > into an automatic punitive action against a guest.
 
 ## 1.4 Primary lens: Predictive
@@ -63,10 +65,10 @@ stay-night. A returning guest can appear as several independent booking rows.
 ## 1.8 Rationale for this framing
 
 - Cancellation prediction is a **routine, recurring** decision (every booking needs a
-  score), unlike a one-off diagnostic question — this justifies a trained model over
+  score), unlike a one-off diagnostic question; this justifies a trained model over
   a single ad-hoc analysis.
-- The target is directly present in the data (`is_canceled`), well-defined, and — as
-  shown in `03-data-understanding.md` — is perfectly reconstructable from
+- The target is directly present in the data (`is_canceled`), well-defined, and, as
+  shown in `03-data-understanding.md`, is perfectly reconstructable from
   `reservation_status`, confirming it is a clean, unambiguous label.
 - A probability + risk tier output (rather than a bare yes/no) matches how revenue
   managers actually work: they prioritise a ranked list under limited staff time,
@@ -80,8 +82,9 @@ stay-night. A returning guest can appear as several independent booking rows.
 ## 1.9 Success criteria (business, not just statistical)
 
 A model is "successful" for this project if it:
-1. Meaningfully outperforms the naive baseline (always-predict-majority-class,
-   62.96% accuracy) on recall/precision/PR-AUC for the cancelled class, not just
+1. Clearly beats the naive baseline (always predict the majority class: 72.72%
+   accuracy and PR-AUC 0.273 on the de-duplicated data, decision #25) on
+   recall/precision/PR-AUC for the cancelled class, not just
    accuracy (see `06-evaluation-plan.md` for why accuracy alone is misleading here).
 2. Uses only information available at prediction time (no leakage from
    `reservation_status` / `reservation_status_date`, see `04-preprocessing-feature-engineering.md`).

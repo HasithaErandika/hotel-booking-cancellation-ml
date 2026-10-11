@@ -1,0 +1,12 @@
+theme,finding,evidence,modelling_implication
+Target,Cancellation prevalence 27.28% after de-duplication,"16,637 of 60,996 Train bookings","Accuracy baseline is ~72.7%; report PR-AUC / recall, never accuracy alone."
+Hotel,City Hotel cancels more than Resort Hotel,City Hotel: 29.8%; Resort Hotel: 23.3%,Keep `hotel`; consider hotel-specific thresholds (plan F-05).
+Lead time,Cancellation rate increases monotonically with lead time,8.3% (0-7d) -> 40.3% (>365d),Keep raw lead_time (trees) and scale it for linear models / SVM.
+Deposit,Non Refund deposits show a near-deterministic cancellation rate,Non Refund: 94.8% (n=678),"Keep feature but report as a probable channel/process confound, not a causal effect (decision #11)."
+History,Guests with a prior cancellation cancel far more often,Yes: 67.0% vs No: 26.5%,Keep previous_cancellations; engineer prior_cancellation_rate (notebook 04).
+History,Repeat guests cancel less,Repeat: 7.6% vs New: 28.1%,Keep is_repeated_guest.
+Leakage audit,required_car_parking_spaces > 0 has ~0% cancellation,"0 cancellations in 5,126 bookings",Probable arrival-time field: exclude from day-zero variant (proposed decision #22).
+Leakage audit,Room re-assignment is associated with far fewer cancellations,Changed: 4.6% vs Same: 31.3%,Re-assignment usually happens at check-in: full-lifecycle variant only.
+Leakage audit,PRT bookings cancel more often than all other countries,PRT: 35.4% vs Other: 23.6%,Possible late-recorded nationality; run a with/without-country ablation (plan F-03). Fairness check in notebook 13.
+Engagement,Cancellation rate falls as special requests increase,0: 32.7%; 1: 22.4%; 2: 21.4%; 3+: 17.1%,Keep total_of_special_requests (note: requests can also be added after booking).
+Drift,Cancellation rate increases from 2015 to 2017,2015: 20.0%; 2016: 26.1%; 2017: 31.9%,Exclude arrival_date_year from features; add temporal robustness check (notebook 14).
