@@ -1,0 +1,89 @@
+{
+  "model_id": "decision_tree__day_zero",
+  "model_key": "decision_tree",
+  "variant": "day_zero",
+  "notebook": "06_decision_tree.ipynb",
+  "preprocessor_family": "tree",
+  "imbalance_strategy": "class_weight",
+  "cv": {
+    "type": "StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "n_rows": 60996
+  },
+  "n_fit_rows": 60996,
+  "n_dev_rows": 13071,
+  "data_files_read": [
+    "data/processed/features/train.csv",
+    "data/processed/features/dev.csv"
+  ],
+  "input_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3"
+  },
+  "best_params": {
+    "model__criterion": "entropy",
+    "model__max_depth": null,
+    "model__min_samples_leaf": 100
+  },
+  "cv_summary": {
+    "accuracy": {
+      "mean": 0.7659682774320389,
+      "std": 0.002658134184092236
+    },
+    "balanced_accuracy": {
+      "mean": 0.7785450387616903,
+      "std": 0.003589638931380269
+    },
+    "f1": {
+      "mean": 0.652671327502546,
+      "std": 0.00355661941953036
+    },
+    "pr_auc": {
+      "mean": 0.7004100895500359,
+      "std": 0.0025519452093309175
+    },
+    "precision": {
+      "mean": 0.5483188577729654,
+      "std": 0.00401500193524186
+    },
+    "recall": {
+      "mean": 0.8062163121950938,
+      "std": 0.01165119401644103
+    },
+    "roc_auc": {
+      "mean": 0.8626765167580233,
+      "std": 0.0015040392378964079
+    },
+    "brier": {
+      "mean": 0.15488901267892258,
+      "std": 0.0014330612952661661
+    }
+  },
+  "dev_quick": {
+    "pr_auc": 0.7087698026081255,
+    "roc_auc": 0.8654268699860042,
+    "brier": 0.15461455352820327
+  },
+  "fit_seconds": 46.79,
+  "model_path": "models/decision_tree__day_zero.joblib",
+  "model_sha256": "e4eff00713edf9aa4630d65b1dd3edd8a0f0f1d4b2745233a841064e8f40609a",
+  "random_state": 42,
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  },
+  "created_at": "2026-10-11T14:20:57+00:00",
+  "tree_depth": 27,
+  "n_leaves": 414
+}

@@ -1,0 +1,95 @@
+,importance
+cat_high__country_PRT,0.24000877536648338
+num__lead_time,0.18625873902933945
+num__total_of_special_requests,0.11011853318630258
+cat_low__market_segment_Online TA,0.08991913208735573
+cat_low__market_segment_Direct,0.04386172887952513
+cat_high__agent_7,0.03515791930095224
+cat_low__customer_type_Transient,0.03439940359727225
+cat_high__agent_infrequent_sklearn,0.031163619433544162
+num__prior_cancellation_rate,0.0293455610231463
+adr__adr,0.028816713223773424
+cat_low__deposit_type_Non Refund,0.026007224134293443
+num__arrival_date_week_number,0.018835473819103235
+cat_high__agent_241,0.018291504177151113
+num__total_previous_bookings,0.01597219797341269
+cat_high__agent_9,0.012221867353056963
+num__arrival_date_day_of_month,0.009346088053054613
+cat_high__agent_8,0.007748583550606788
+num__stays_in_week_nights,0.007719487350675655
+num__total_nights,0.007075609439024396
+num__previous_bookings_not_canceled,0.005823995682272035
+cat_high__agent_No Agent,0.004487421822481687
+cat_high__country_infrequent_sklearn,0.003464750683858857
+num__weekend_night_ratio,0.003012307742669204
+cat_low__meal_BB,0.00248384479996719
+cat_low__customer_type_Transient-Party,0.002331842480737631
+cat_low__customer_type_Contract,0.0022026447468770144
+cat_high__country_DEU,0.002174423108245787
+cat_low__arrival_season_Winter,0.0020460006263195527
+cat_low__hotel_Resort Hotel,0.001873373769827934
+cat_high__country_FRA,0.0018079814734627323
+num__is_family,0.001498925642239658
+num__total_guests,0.0012057827294376857
+cat_low__meal_HB,0.0011484162127267327
+cat_high__country_BEL,0.0009747530919973605
+cat_high__country_BRA,0.0009466253226760751
+cat_low__arrival_season_Spring,0.0008616271316360277
+cat_high__agent_240,0.0008272621341555194
+cat_low__arrival_season_Autumn,0.0008100900356474091
+cat_low__arrival_season_Summer,0.0007845187718759685
+cat_low__market_segment_Groups,0.0007767127043641135
+cat_high__company_No Company,0.0007368923793527876
+cat_low__reserved_room_type_D,0.000719962233733701
+cat_high__country_NLD,0.0007151616881879894
+cat_high__country_ESP,0.0006857586506433061
+cat_high__country_GBR,0.0004842968751477617
+cat_low__reserved_room_type_F,0.0004547311208575592
+cat_low__distribution_channel_Direct,0.00038313103868077125
+cat_high__agent_14,0.00035081233028918927
+num__adults,0.00034502985583966385
+cat_low__distribution_channel_TA/TO,0.0003244876569500255
+cat_low__meal_SC,0.0003019052646407107
+cat_low__market_segment_Corporate,0.00030124520006970603
+num__stays_in_weekend_nights,0.00022031959342968415
+cat_low__reserved_room_type_A,0.00016480442062754351
+cat_low__reserved_room_type_E,3.128426332410295e-17
+num__is_repeated_guest,0.0
+num__previous_cancellations,0.0
+cat_low__meal_FB,0.0
+num__is_invalid_guest_count,0.0
+cat_low__hotel_City Hotel,0.0
+num__babies,0.0
+num__children,0.0
+cat_low__market_segment_Complementary,0.0
+cat_low__market_segment_Aviation,0.0
+cat_low__meal_Undefined,0.0
+cat_low__reserved_room_type_L,0.0
+cat_low__reserved_room_type_B,0.0
+cat_low__reserved_room_type_C,0.0
+cat_low__reserved_room_type_H,0.0
+cat_low__reserved_room_type_G,0.0
+cat_low__distribution_channel_GDS,0.0
+cat_low__distribution_channel_Corporate,0.0
+cat_low__market_segment_Undefined,0.0
+cat_low__market_segment_Offline TA/TO,0.0
+cat_low__deposit_type_No Deposit,0.0
+cat_low__distribution_channel_Undefined,0.0
+cat_low__deposit_type_Refundable,0.0
+cat_low__customer_type_Group,0.0
+cat_low__reserved_room_type_P,0.0
+cat_high__agent_28,0.0
+cat_high__agent_1,0.0
+cat_high__country_ITA,0.0
+cat_high__country_IRL,0.0
+cat_high__agent_250,0.0
+cat_high__company_154,0.0
+cat_high__company_153,0.0
+cat_high__company_174,0.0
+cat_high__company_219,0.0
+cat_high__company_233,0.0
+cat_high__company_223,0.0
+cat_high__company_281,0.0
+cat_high__company_40,0.0
+cat_high__company_45,0.0
+cat_high__company_infrequent_sklearn,0.0

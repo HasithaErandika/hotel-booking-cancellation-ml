@@ -1,0 +1,19 @@
+|--- num__lead_time <= 8.50
+|   |--- num__prior_cancellation_rate <= 0.16
+|   |   |--- cat_high__agent_9 <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- cat_high__agent_9 >  0.50
+|   |   |   |--- class: 0
+|   |--- num__prior_cancellation_rate >  0.16
+|   |   |--- class: 1
+|--- num__lead_time >  8.50
+|   |--- cat_low__market_segment_Online TA <= 0.50
+|   |   |--- cat_high__country_PRT <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- cat_high__country_PRT >  0.50
+|   |   |   |--- class: 1
+|   |--- cat_low__market_segment_Online TA >  0.50
+|   |   |--- num__total_of_special_requests <= 0.50
+|   |   |   |--- class: 1
+|   |   |--- num__total_of_special_requests >  0.50
+|   |   |   |--- class: 1

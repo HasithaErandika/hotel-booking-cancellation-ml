@@ -1,0 +1,87 @@
+{
+  "model_id": "svm_rbf__day_zero",
+  "model_key": "svm_rbf",
+  "variant": "day_zero",
+  "notebook": "09_svm_rbf.ipynb",
+  "preprocessor_family": "linear",
+  "imbalance_strategy": "class_weight",
+  "cv": {
+    "type": "StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "n_rows": 12000
+  },
+  "n_fit_rows": 60996,
+  "n_dev_rows": 13071,
+  "data_files_read": [
+    "data/processed/features/train.csv",
+    "data/processed/features/dev.csv"
+  ],
+  "input_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3"
+  },
+  "best_params": {
+    "model__C": 31.428808908401084,
+    "model__gamma": 0.0033572967053517922
+  },
+  "cv_summary": {
+    "accuracy": {
+      "mean": 0.7561666666666668,
+      "std": 0.007005702042701441
+    },
+    "balanced_accuracy": {
+      "mean": 0.7697330467832575,
+      "std": 0.010392559772840444
+    },
+    "f1": {
+      "mean": 0.6413836161189229,
+      "std": 0.0114988517094263
+    },
+    "pr_auc": {
+      "mean": 0.6770041592672482,
+      "std": 0.014014564342545409
+    },
+    "precision": {
+      "mean": 0.5354724573106872,
+      "std": 0.008190871252444788
+    },
+    "recall": {
+      "mean": 0.7995788687349721,
+      "std": 0.018676291037593377
+    },
+    "roc_auc": {
+      "mean": 0.8499329613057116,
+      "std": 0.00840151704223045
+    }
+  },
+  "dev_quick": {
+    "pr_auc": 0.6887270517947329,
+    "roc_auc": 0.8570743686205125,
+    "brier": 0.13208364409367562
+  },
+  "fit_seconds": 501.54,
+  "model_path": "models/svm_rbf__day_zero.joblib",
+  "model_sha256": "7fb6f591ef6a7424062e9f49509dfdb560b0df66ddf20b096122a44beb487e6c",
+  "random_state": 42,
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.2.0",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  },
+  "created_at": "2026-10-11T15:59:30+00:00",
+  "cv_on_subsample": true,
+  "search_sample_size": 12000,
+  "probability_method": "CalibratedClassifierCV(sigmoid, cv=3) on Train",
+  "mean_support_vectors": 21701,
+  "support_vector_fraction": 0.5336661420421012
+}

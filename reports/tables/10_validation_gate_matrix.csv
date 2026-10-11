@@ -1,0 +1,12 @@
+scope,M1,M2,M3,M4,M4b,M5,M6,M7,eligible
+decision_tree__day_zero,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+decision_tree__full_lifecycle,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+dummy_most_frequent__baseline,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+dummy_stratified__baseline,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+logreg__day_zero,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+logreg__full_lifecycle,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+random_forest__day_zero,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+random_forest__full_lifecycle,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+svm_rbf__day_zero,PASS,PASS,PASS,PASS,WARN,PASS,PASS,PASS,True
+xgboost__day_zero,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True
+xgboost__full_lifecycle,PASS,PASS,PASS,PASS,-,PASS,PASS,PASS,True

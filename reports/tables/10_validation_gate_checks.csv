@@ -1,0 +1,84 @@
+check,scope,status,detail
+G1,global,PASS,raw sha256 7c2ae42a7353905e...
+G2,global,PASS,all links intact
+G3,global,PASS,"content overlap {'train-dev': 0, 'train-test': 0, 'dev-test': 0}, id overlap {'train-dev': 0, 'train-test': 0, 'dev-test': 0}, union==clean True, clean has no dups True"
+G4,global,PASS,"gaps (pp): train=0.000, dev=0.001, test=0.001"
+G5,global,PASS,scanned 5 notebooks; hits: none
+M1,decision_tree__day_zero,PASS,forbidden columns consumed: none
+M2,decision_tree__day_zero,PASS,variant=day_zero; equals spec: True; post-booking used: none
+M3,decision_tree__day_zero,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,decision_tree__day_zero,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,decision_tree__day_zero,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,decision_tree__day_zero,PASS,"fit rows 60,996 vs Train 60,996; strategy: class_weight"
+M7,decision_tree__day_zero,PASS,model file hash vs card
+M1,decision_tree__full_lifecycle,PASS,forbidden columns consumed: none
+M2,decision_tree__full_lifecycle,PASS,"variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+M3,decision_tree__full_lifecycle,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,decision_tree__full_lifecycle,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,decision_tree__full_lifecycle,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,decision_tree__full_lifecycle,PASS,"fit rows 60,996 vs Train 60,996; strategy: class_weight"
+M7,decision_tree__full_lifecycle,PASS,model file hash vs card
+M1,dummy_most_frequent__baseline,PASS,forbidden columns consumed: none
+M2,dummy_most_frequent__baseline,PASS,variant=baseline; equals spec: True; post-booking used: none
+M3,dummy_most_frequent__baseline,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,dummy_most_frequent__baseline,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,dummy_most_frequent__baseline,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,dummy_most_frequent__baseline,PASS,"fit rows 60,996 vs Train 60,996; strategy: none"
+M7,dummy_most_frequent__baseline,PASS,model file hash vs card
+M1,dummy_stratified__baseline,PASS,forbidden columns consumed: none
+M2,dummy_stratified__baseline,PASS,variant=baseline; equals spec: True; post-booking used: none
+M3,dummy_stratified__baseline,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,dummy_stratified__baseline,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,dummy_stratified__baseline,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,dummy_stratified__baseline,PASS,"fit rows 60,996 vs Train 60,996; strategy: none"
+M7,dummy_stratified__baseline,PASS,model file hash vs card
+M1,logreg__day_zero,PASS,forbidden columns consumed: none
+M2,logreg__day_zero,PASS,variant=day_zero; equals spec: True; post-booking used: none
+M3,logreg__day_zero,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,logreg__day_zero,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,logreg__day_zero,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,logreg__day_zero,PASS,"fit rows 60,996 vs Train 60,996; strategy: class_weight"
+M7,logreg__day_zero,PASS,model file hash vs card
+M1,logreg__full_lifecycle,PASS,forbidden columns consumed: none
+M2,logreg__full_lifecycle,PASS,"variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+M3,logreg__full_lifecycle,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,logreg__full_lifecycle,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,logreg__full_lifecycle,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,logreg__full_lifecycle,PASS,"fit rows 60,996 vs Train 60,996; strategy: class_weight"
+M7,logreg__full_lifecycle,PASS,model file hash vs card
+M1,random_forest__day_zero,PASS,forbidden columns consumed: none
+M2,random_forest__day_zero,PASS,variant=day_zero; equals spec: True; post-booking used: none
+M3,random_forest__day_zero,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,random_forest__day_zero,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,random_forest__day_zero,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,random_forest__day_zero,PASS,"fit rows 60,996 vs Train 60,996; strategy: class_weight"
+M7,random_forest__day_zero,PASS,model file hash vs card
+M1,random_forest__full_lifecycle,PASS,forbidden columns consumed: none
+M2,random_forest__full_lifecycle,PASS,"variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+M3,random_forest__full_lifecycle,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,random_forest__full_lifecycle,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,random_forest__full_lifecycle,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,random_forest__full_lifecycle,PASS,"fit rows 60,996 vs Train 60,996; strategy: class_weight"
+M7,random_forest__full_lifecycle,PASS,model file hash vs card
+M1,svm_rbf__day_zero,PASS,forbidden columns consumed: none
+M2,svm_rbf__day_zero,PASS,variant=day_zero; equals spec: True; post-booking used: none
+M3,svm_rbf__day_zero,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,svm_rbf__day_zero,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M4b,svm_rbf__day_zero,WARN,"CV ran on 12,000 of 60,996 Train rows (subsample; documented in card)"
+M5,svm_rbf__day_zero,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,svm_rbf__day_zero,PASS,"fit rows 60,996 vs Train 60,996; strategy: class_weight"
+M7,svm_rbf__day_zero,PASS,model file hash vs card
+M1,xgboost__day_zero,PASS,forbidden columns consumed: none
+M2,xgboost__day_zero,PASS,variant=day_zero; equals spec: True; post-booking used: none
+M3,xgboost__day_zero,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,xgboost__day_zero,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,xgboost__day_zero,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,xgboost__day_zero,PASS,"fit rows 60,996 vs Train 60,996; strategy: scale_pos_weight (searched)"
+M7,xgboost__day_zero,PASS,model file hash vs card
+M1,xgboost__full_lifecycle,PASS,forbidden columns consumed: none
+M2,xgboost__full_lifecycle,PASS,"variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+M3,xgboost__full_lifecycle,PASS,state identical to Train-only refit: True; n_samples_seen ok: True
+M4,xgboost__full_lifecycle,PASS,StratifiedKFold k=5 shuffle=True seed=42
+M5,xgboost__full_lifecycle,PASS,"files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+M6,xgboost__full_lifecycle,PASS,"fit rows 60,996 vs Train 60,996; strategy: scale_pos_weight (searched)"
+M7,xgboost__full_lifecycle,PASS,model file hash vs card

@@ -1,0 +1,553 @@
+{
+  "created_at": "2026-10-11T16:01:27+00:00",
+  "notebook": "10_validation_gate.ipynb",
+  "global_passed": true,
+  "eligible_models": [
+    "decision_tree__day_zero",
+    "decision_tree__full_lifecycle",
+    "dummy_most_frequent__baseline",
+    "dummy_stratified__baseline",
+    "logreg__day_zero",
+    "logreg__full_lifecycle",
+    "random_forest__day_zero",
+    "random_forest__full_lifecycle",
+    "svm_rbf__day_zero",
+    "xgboost__day_zero",
+    "xgboost__full_lifecycle"
+  ],
+  "ineligible_models": {},
+  "warnings": [
+    {
+      "check": "M4b",
+      "scope": "svm_rbf__day_zero",
+      "status": "WARN",
+      "detail": "CV ran on 12,000 of 60,996 Train rows (subsample; documented in card)"
+    }
+  ],
+  "checks": [
+    {
+      "check": "G1",
+      "scope": "global",
+      "status": "PASS",
+      "detail": "raw sha256 7c2ae42a7353905e..."
+    },
+    {
+      "check": "G2",
+      "scope": "global",
+      "status": "PASS",
+      "detail": "all links intact"
+    },
+    {
+      "check": "G3",
+      "scope": "global",
+      "status": "PASS",
+      "detail": "content overlap {'train-dev': 0, 'train-test': 0, 'dev-test': 0}, id overlap {'train-dev': 0, 'train-test': 0, 'dev-test': 0}, union==clean True, clean has no dups True"
+    },
+    {
+      "check": "G4",
+      "scope": "global",
+      "status": "PASS",
+      "detail": "gaps (pp): train=0.000, dev=0.001, test=0.001"
+    },
+    {
+      "check": "G5",
+      "scope": "global",
+      "status": "PASS",
+      "detail": "scanned 5 notebooks; hits: none"
+    },
+    {
+      "check": "M1",
+      "scope": "decision_tree__day_zero",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "decision_tree__day_zero",
+      "status": "PASS",
+      "detail": "variant=day_zero; equals spec: True; post-booking used: none"
+    },
+    {
+      "check": "M3",
+      "scope": "decision_tree__day_zero",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "decision_tree__day_zero",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "decision_tree__day_zero",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "decision_tree__day_zero",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: class_weight"
+    },
+    {
+      "check": "M7",
+      "scope": "decision_tree__day_zero",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "decision_tree__full_lifecycle",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "decision_tree__full_lifecycle",
+      "status": "PASS",
+      "detail": "variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+    },
+    {
+      "check": "M3",
+      "scope": "decision_tree__full_lifecycle",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "decision_tree__full_lifecycle",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "decision_tree__full_lifecycle",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "decision_tree__full_lifecycle",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: class_weight"
+    },
+    {
+      "check": "M7",
+      "scope": "decision_tree__full_lifecycle",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "dummy_most_frequent__baseline",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "dummy_most_frequent__baseline",
+      "status": "PASS",
+      "detail": "variant=baseline; equals spec: True; post-booking used: none"
+    },
+    {
+      "check": "M3",
+      "scope": "dummy_most_frequent__baseline",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "dummy_most_frequent__baseline",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "dummy_most_frequent__baseline",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "dummy_most_frequent__baseline",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: none"
+    },
+    {
+      "check": "M7",
+      "scope": "dummy_most_frequent__baseline",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "dummy_stratified__baseline",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "dummy_stratified__baseline",
+      "status": "PASS",
+      "detail": "variant=baseline; equals spec: True; post-booking used: none"
+    },
+    {
+      "check": "M3",
+      "scope": "dummy_stratified__baseline",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "dummy_stratified__baseline",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "dummy_stratified__baseline",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "dummy_stratified__baseline",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: none"
+    },
+    {
+      "check": "M7",
+      "scope": "dummy_stratified__baseline",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "logreg__day_zero",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "logreg__day_zero",
+      "status": "PASS",
+      "detail": "variant=day_zero; equals spec: True; post-booking used: none"
+    },
+    {
+      "check": "M3",
+      "scope": "logreg__day_zero",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "logreg__day_zero",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "logreg__day_zero",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "logreg__day_zero",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: class_weight"
+    },
+    {
+      "check": "M7",
+      "scope": "logreg__day_zero",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "logreg__full_lifecycle",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "logreg__full_lifecycle",
+      "status": "PASS",
+      "detail": "variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+    },
+    {
+      "check": "M3",
+      "scope": "logreg__full_lifecycle",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "logreg__full_lifecycle",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "logreg__full_lifecycle",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "logreg__full_lifecycle",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: class_weight"
+    },
+    {
+      "check": "M7",
+      "scope": "logreg__full_lifecycle",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "random_forest__day_zero",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "random_forest__day_zero",
+      "status": "PASS",
+      "detail": "variant=day_zero; equals spec: True; post-booking used: none"
+    },
+    {
+      "check": "M3",
+      "scope": "random_forest__day_zero",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "random_forest__day_zero",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "random_forest__day_zero",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "random_forest__day_zero",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: class_weight"
+    },
+    {
+      "check": "M7",
+      "scope": "random_forest__day_zero",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "random_forest__full_lifecycle",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "random_forest__full_lifecycle",
+      "status": "PASS",
+      "detail": "variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+    },
+    {
+      "check": "M3",
+      "scope": "random_forest__full_lifecycle",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "random_forest__full_lifecycle",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "random_forest__full_lifecycle",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "random_forest__full_lifecycle",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: class_weight"
+    },
+    {
+      "check": "M7",
+      "scope": "random_forest__full_lifecycle",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "svm_rbf__day_zero",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "svm_rbf__day_zero",
+      "status": "PASS",
+      "detail": "variant=day_zero; equals spec: True; post-booking used: none"
+    },
+    {
+      "check": "M3",
+      "scope": "svm_rbf__day_zero",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "svm_rbf__day_zero",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M4b",
+      "scope": "svm_rbf__day_zero",
+      "status": "WARN",
+      "detail": "CV ran on 12,000 of 60,996 Train rows (subsample; documented in card)"
+    },
+    {
+      "check": "M5",
+      "scope": "svm_rbf__day_zero",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "svm_rbf__day_zero",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: class_weight"
+    },
+    {
+      "check": "M7",
+      "scope": "svm_rbf__day_zero",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "xgboost__day_zero",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "xgboost__day_zero",
+      "status": "PASS",
+      "detail": "variant=day_zero; equals spec: True; post-booking used: none"
+    },
+    {
+      "check": "M3",
+      "scope": "xgboost__day_zero",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "xgboost__day_zero",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "xgboost__day_zero",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "xgboost__day_zero",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: scale_pos_weight (searched)"
+    },
+    {
+      "check": "M7",
+      "scope": "xgboost__day_zero",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    },
+    {
+      "check": "M1",
+      "scope": "xgboost__full_lifecycle",
+      "status": "PASS",
+      "detail": "forbidden columns consumed: none"
+    },
+    {
+      "check": "M2",
+      "scope": "xgboost__full_lifecycle",
+      "status": "PASS",
+      "detail": "variant=full_lifecycle; equals spec: True; post-booking used: ['assigned_room_type', 'booking_changes', 'days_in_waiting_list', 'required_car_parking_spaces', 'room_type_changed']"
+    },
+    {
+      "check": "M3",
+      "scope": "xgboost__full_lifecycle",
+      "status": "PASS",
+      "detail": "state identical to Train-only refit: True; n_samples_seen ok: True"
+    },
+    {
+      "check": "M4",
+      "scope": "xgboost__full_lifecycle",
+      "status": "PASS",
+      "detail": "StratifiedKFold k=5 shuffle=True seed=42"
+    },
+    {
+      "check": "M5",
+      "scope": "xgboost__full_lifecycle",
+      "status": "PASS",
+      "detail": "files read: ['data/processed/features/train.csv', 'data/processed/features/dev.csv']"
+    },
+    {
+      "check": "M6",
+      "scope": "xgboost__full_lifecycle",
+      "status": "PASS",
+      "detail": "fit rows 60,996 vs Train 60,996; strategy: scale_pos_weight (searched)"
+    },
+    {
+      "check": "M7",
+      "scope": "xgboost__full_lifecycle",
+      "status": "PASS",
+      "detail": "model file hash vs card"
+    }
+  ],
+  "model_card_hashes": {
+    "decision_tree__day_zero": "4ac183c2793cfe9be8711a430e2d3dc55083c318fda6d0c0997ef1497cb46305",
+    "decision_tree__full_lifecycle": "21725cd62918c7b7ba020fb52723a87ddb16b226a07e282b0d23f6f1e02bf0d8",
+    "dummy_most_frequent__baseline": "0a6664096e84d25af17a2ba5710f024ae5b2c4a967eb2bf7329fbf54b9a1cf5b",
+    "dummy_stratified__baseline": "75e3864762f8005b7c0f43f2a64d850897918cda5baef85656137641462f8f81",
+    "logreg__day_zero": "1ba043ad89906676a8cdf2e788433b9d8988dcdd4613fc061907e15c3a74ac69",
+    "logreg__full_lifecycle": "6f6e78867280c3677e2eb5c197b9e89215168976c621c6f8bd7feed0911252fd",
+    "random_forest__day_zero": "6cd68ff4f6ea33969798a76a025ce14b69a5105e2d185378754cbd56a985db62",
+    "random_forest__full_lifecycle": "8568fb6ddbec5267fba31761062e9ca34cbb9aabe103bfb61e9393a9ce2420a2",
+    "svm_rbf__day_zero": "e1aa65f76ea828bee6e9eacb9443e441a9dfc53971e3c3e1504de648f4768196",
+    "xgboost__day_zero": "6f63250aca4c20cb8746a16f26b693dc376d65ad6bc53ce4b824778559d8d1ae",
+    "xgboost__full_lifecycle": "c8f0aff779b7052fa65b101f8994d139a001c5a7fdebfe9610b1a9429ffecad6"
+  },
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.2.0",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "model_id": "xgboost__day_zero",
+  "model_key": "xgboost",
+  "variant": "day_zero",
+  "notebook": "08_xgboost_tuning.ipynb",
+  "preprocessor_family": "tree",
+  "imbalance_strategy": "scale_pos_weight (searched)",
+  "cv": {
+    "type": "StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "n_rows": 60996
+  },
+  "n_fit_rows": 60996,
+  "n_dev_rows": 13071,
+  "data_files_read": [
+    "data/processed/features/train.csv",
+    "data/processed/features/dev.csv"
+  ],
+  "input_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3"
+  },
+  "best_params": {
+    "model__colsample_bytree": 0.8604699621260646,
+    "model__learning_rate": 0.02851301505515497,
+    "model__max_depth": 10,
+    "model__min_child_weight": 1.3239563983335276,
+    "model__n_estimators": 669,
+    "model__scale_pos_weight": 1.0,
+    "model__subsample": 0.7001847274422337
+  },
+  "cv_summary": {
+    "accuracy": {
+      "mean": 0.8338415806724282,
+      "std": 0.000723596798535307
+    },
+    "balanced_accuracy": {
+      "mean": 0.7685259939116136,
+      "std": 0.0027811959846846864
+    },
+    "f1": {
+      "mean": 0.6722513122640288,
+      "std": 0.0033227818602303287
+    },
+    "pr_auc": {
+      "mean": 0.7654160989884039,
+      "std": 0.002298957093459008
+    },
+    "precision": {
+      "mean": 0.7275928175280592,
+      "std": 0.004313989906887085
+    },
+    "recall": {
+      "mean": 0.6248131184828096,
+      "std": 0.008273369822973975
+    },
+    "roc_auc": {
+      "mean": 0.892901175626237,
+      "std": 0.0012177942825829565
+    },
+    "brier": {
+      "mean": 0.11511514931917191,
+      "std": 0.0007122509647492476
+    }
+  },
+  "dev_quick": {
+    "pr_auc": 0.7707045945490462,
+    "roc_auc": 0.8939700444599985,
+    "brier": 0.11429189145565033
+  },
+  "fit_seconds": 564.5,
+  "model_path": "models/xgboost__day_zero.joblib",
+  "model_sha256": "3d6a71b0832cc287a6ee7a9a74719f94ab7a01176c8c7c4a816909f2d8bd3a8f",
+  "random_state": 42,
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.2.0",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  },
+  "created_at": "2026-10-11T15:34:33+00:00",
+  "best_iteration": 610,
+  "early_stopping_rounds": 50,
+  "early_stopping_set": "dev",
+  "scale_pos_weight_reference": 2.666285989060528
+}

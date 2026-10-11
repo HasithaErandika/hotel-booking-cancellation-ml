@@ -1,0 +1,89 @@
+{
+  "model_id": "decision_tree__full_lifecycle",
+  "model_key": "decision_tree",
+  "variant": "full_lifecycle",
+  "notebook": "06_decision_tree.ipynb",
+  "preprocessor_family": "tree",
+  "imbalance_strategy": "class_weight",
+  "cv": {
+    "type": "StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "n_rows": 60996
+  },
+  "n_fit_rows": 60996,
+  "n_dev_rows": 13071,
+  "data_files_read": [
+    "data/processed/features/train.csv",
+    "data/processed/features/dev.csv"
+  ],
+  "input_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3"
+  },
+  "best_params": {
+    "model__criterion": "entropy",
+    "model__max_depth": null,
+    "model__min_samples_leaf": 50
+  },
+  "cv_summary": {
+    "accuracy": {
+      "mean": 0.7952815831450845,
+      "std": 0.0029268855994343547
+    },
+    "balanced_accuracy": {
+      "mean": 0.8061920337084685,
+      "std": 0.0021614566291662286
+    },
+    "f1": {
+      "mean": 0.6886971229084404,
+      "std": 0.0029772644653887717
+    },
+    "pr_auc": {
+      "mean": 0.7447764124658062,
+      "std": 0.005270988145959668
+    },
+    "precision": {
+      "mean": 0.5884348719732014,
+      "std": 0.004726015409891818
+    },
+    "recall": {
+      "mean": 0.8301978747601211,
+      "std": 0.005001694298402751
+    },
+    "roc_auc": {
+      "mean": 0.8888988715721385,
+      "std": 0.0011878224076253567
+    },
+    "brier": {
+      "mean": 0.1386127636174281,
+      "std": 0.0005421483558784624
+    }
+  },
+  "dev_quick": {
+    "pr_auc": 0.7533776387116555,
+    "roc_auc": 0.8888691544633064,
+    "brier": 0.13979166598120576
+  },
+  "fit_seconds": 50.88,
+  "model_path": "models/decision_tree__full_lifecycle.joblib",
+  "model_sha256": "13c787f67ccfc286d7a35f34ba591b15e7d8d024f4f86a35ef005a832723d0a4",
+  "random_state": 42,
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  },
+  "created_at": "2026-10-11T14:21:48+00:00",
+  "tree_depth": 31,
+  "n_leaves": 687
+}
