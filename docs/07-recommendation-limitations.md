@@ -2,42 +2,62 @@
 
 *Rubric: 10 marks. Integration; Human Dimension; Caring | Communication; human-centred AI*
 
-This file is finalised **last**, after `06-evaluation-plan.md` has real numbers.
-The structure below is fixed now so the team writes toward it; do not fabricate
-conclusions before the models are actually trained and evaluated.
+This file is written from the final results of notebooks 11 to 14 (see
+`06-evaluation-plan.md` for every number and its source table).
 
-## 7.1 Recommendation template
+## 7.1 Recommendation
 
-> The analysis shows that cancellation risk can be estimated using information
-> available at [booking time / re-score time, state which variant won, see
-> `05-modeling-strategy.md` §5.3], with [final model] providing the best balance of
-> [PR-AUC / recall at the chosen threshold] and interpretability among the models
-> compared (`06-evaluation-plan.md` §6.4). We recommend the reservations team use
-> the model's output as a **3-tier risk score (Low / Medium / High)**; not a hard
-> accept/reject decision, to prioritise limited staff time on monitoring and
-> follow-up for the highest-risk bookings, particularly around [state the
-> segment(s) found most informative, e.g. Non Refund deposits, high lead time,
-> repeat-cancellation guests, from `03-data-understanding.md` §3.5].
+> The analysis shows that cancellation risk can be estimated using only information
+> available **at booking time** (the day-zero variant). **XGBoost** gave the best
+> ranking quality of the six models compared (CV PR-AUC 0.765, Test PR-AUC 0.774 vs
+> 0.273 for a no-skill model), with Random Forest a close second
+> (`06-evaluation-plan.md` §6.4). We recommend the reservations team use the
+> calibrated output as a **3-tier risk score (Low / Medium / High)**, not a hard
+> accept/reject decision, to focus limited staff time on the bookings most likely to
+> cancel. On Test, the **High tier (score 0.35 or more) holds 32.5% of bookings but
+> 77.8% of all cancellations**, and 65.3% of High bookings did cancel. The Low tier
+> holds 52.2% of bookings with a 4.8% cancel rate. The main drivers of the score are
+> the guest's country, lead time, booking agent, number of special requests and
+> market segment.
+
+Suggested use of each tier:
+
+| Tier | Score | What staff do | Test evidence |
+|---|---|---|---|
+| High | 0.35 and above | Reconfirm the booking, offer flexible rebooking, include in overbooking allowance | 65.3% cancel; 77.8% of all cancellations |
+| Medium | 0.18 to 0.35 | Watch; send a standard reminder closer to arrival | 23.2% cancel |
+| Low | below 0.18 | No action | 4.8% cancel |
+
+Under the illustrative costs in `06-evaluation-plan.md` §6.5, this policy lowers the
+expected cost of cancellations by about 27.7% per 1,000 bookings (17,934 vs 24,792).
+The hotel should replace those costs with its own before using this figure.
 
 ## 7.2 Stakeholder value
 
 - **Reservations manager:** a ranked worklist instead of treating all bookings
-  equally, focusing follow-up effort on the ~30-40% of bookings that carry most of
-  the cancellation risk.
-- **Revenue management:** a defensible, evidence-based input (not guesswork) for
-  overbooking-allowance and deposit-policy decisions.
-- **Front office / operations:** earlier visibility into likely no-shows/cancellations
-  supports staffing and room-allocation planning.
+  equally. Following up on about one booking in three (the High tier) reaches more
+  than three out of four cancellations.
+- **Revenue management:** a calibrated probability (expected calibration error 0.007)
+  that can be summed over a night's bookings to estimate expected cancellations, an
+  evidence-based input to overbooking and deposit-policy decisions.
+- **Front office / operations:** earlier visibility into likely cancellations supports
+  staffing and room-allocation planning.
+- **Where it helps least:** Direct and Corporate bookings. The model catches only 32%
+  and 43% of their cancellations, so staff should not assume a Low score is safe for
+  those segments.
 
 ## 7.3 Limitations
 
-- **Historical, not current data.** Bookings span 2015-2017 for two specific
-  hotels; guest behaviour, distribution channels, and pricing have likely shifted
-  since. The model should be re-validated on recent data before real deployment,
-  not assumed to generalise indefinitely.
+- **Historical, not current data, and the model drifts.** Bookings span 2015-2017
+  for two specific hotels. The temporal check in notebook 14 shows the cost of time:
+  trained on 2015-2016 and tested on 2017, PR-AUC falls from 0.774 to 0.650 and recall
+  from 0.778 to 0.519, because the cancel rate rose from about 25% to 32%. In use, the
+  model must be retrained regularly (for example every quarter) and its threshold
+  re-checked on recent bookings. The 0.774 Test score is only valid for bookings like
+  the training period.
 - **Two hotels only.** One City Hotel, one Resort Hotel, findings may not
   transfer to hotels of a different size, market, or region.
-- **No causal claims.** Associations found (e.g. `deposit_type`, prior
+- **No causal claims.** Associations found (e.g. `country`, `deposit_type`, prior
   cancellations) are *correlational*. In particular, the `Non Refund` →
   cancellation relationship (99.36% raw, 94.59% after de-duplication, §3.5) is almost certainly confounded by
   booking channel/process, not a simple causal effect of the deposit policy
@@ -46,24 +66,33 @@ conclusions before the models are actually trained and evaluated.
 - **Missing real-world variables.** No data on price competitiveness, weather,
   local events, guest income, or actual reason for cancellation; the model can
   only use what's in this table.
-- **Errors are inevitable.** False positives and false negatives will occur at
-  whatever operating threshold is chosen (§6.5); the report states the measured
-  rates at the recommended threshold rather than implying the model is exact.
-- **Threshold is a business judgement, not a statistical fact.** The
-  precision/recall trade-off point recommended in `06-evaluation-plan.md` §6.5
-  rests on an illustrative cost assumption the project states explicitly, the
-  hotel should confirm or adjust it against real operational costs.
+- **Errors are inevitable.** At the 0.35 threshold on Test, 1,474 of 4,248 flagged
+  bookings (35%) did not cancel, and 791 of 3,565 cancellations (22%) were missed.
+  Errors are uneven: Direct and Corporate bookings are mostly missed.
+- **Close race between the top two models.** XGBoost beat Random Forest by only
+  0.0065 CV PR-AUC (p = 0.054). Either would serve; XGBoost was picked by a fixed
+  rule, not because it is clearly better.
+- **Explanations are global only.** SHAP was not run (`shap` was not installed), so
+  per-booking explanations are not yet available. Permutation importance gives the
+  global drivers.
+- **Threshold is a business judgement, not a statistical fact.** The 0.35 threshold
+  rests on an illustrative cost assumption (a missed cancellation costs about 1.8
+  times a false alarm). It holds for ratios from 1.5 to 2.0; outside that range it
+  moves (0.52 at 1.0, 0.25 at 3.0). The hotel should confirm the costs.
 
 ## 7.4 Risks and responsible-use guardrails
 
-- **Fairness:** `country` and `agent`/`company` correlate with guest nationality
-  and booking channel; a risk score should never be used to justify differential
-  treatment of guests by nationality. Error rates should be checked across
-  `country` and `market_segment` groups before deployment (extend §6.6's error
-  analysis), and any large disparity reported as a limitation, not hidden.
+- **Fairness:** `country` is the single most important feature, and the audit in
+  `06-evaluation-plan.md` §6.6 flagged 8 of 11 country groups. Portuguese bookings
+  get 1.36 times the average false alarm rate; Dutch and Belgian bookings have their
+  cancellations missed more often (recall about 0.57 to 0.58 vs 0.77 overall). The
+  score must never be used to treat guests differently by nationality (for example
+  stricter deposits or worse rates). Actions on a High score should be the same
+  helpful contact for every guest. A version without `country` should be tested
+  before any real use, to see how much accuracy it costs.
 - **Transparency:** front-office staff should be able to see the top factors
-  behind a given booking's score (via the explainability work in
-  `06-evaluation-plan.md`), not just a bare number.
+  behind a given booking's score, not just a bare number. This needs per-booking
+  SHAP explanations, which are the next step (install `shap` and re-run notebook 13).
 - **Human oversight:** the score supports a human decision (follow-up call,
   monitoring); it must not automatically cancel, upcharge, or deny a booking.
 - **Privacy:** the public dataset already has guest-identifying information

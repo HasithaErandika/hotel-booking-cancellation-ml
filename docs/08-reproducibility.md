@@ -31,10 +31,19 @@
 - Exact library versions are pinned in `requirements.txt`: at minimum `python`,
   `pandas`, `numpy`, `scikit-learn`, `xgboost`, `matplotlib`/`seaborn`, `shap`.
   Install them all before running the notebooks (`pip install -r requirements.txt`).
-  Notebooks 08 (XGBoost) and 13 (SHAP) fail if `xgboost` or `shap` is missing.
+  Notebook 08 fails if `xgboost` is missing. `shap` is optional: notebook 13 skips
+  its SHAP section without it (the recorded run had no `shap`).
+- `xgboost` is pinned to 3.2.0, the newest release that supports Python 3.11.
+- Recorded run (from `artifacts/test_evaluation_lock.json`): Python 3.11.15,
+  numpy 2.4.6, pandas 3.0.3, scikit-learn 1.9.0, xgboost 3.2.0, scipy 1.17.1,
+  matplotlib 3.10.9, seaborn 0.13.2, joblib 1.5.3.
 - Every notebook sets `RANDOM_STATE = 42` in its configuration cell and prints the
   library versions it ran with. The versions are also saved in every JSON artifact.
 - Team kernel: Python 3.11.
+- Memory: the Random Forest pipeline is about 200 MB. Permutation importance in notebooks
+  07 and 13 runs in one process (`PERMUTATION_JOBS = 1`). With `n_jobs=-1` each worker
+  holds its own copy of the model, which ran a 16 GB laptop out of RAM. The forest still
+  uses all cores when it predicts, so results and run time barely change.
 
 ## 8.3 Reproducing the whole pipeline
 
@@ -47,7 +56,9 @@
    notebook first.
 4. Notebook 14 reads the Test split once and then writes
    `artifacts/test_evaluation_lock.json`. Re-running it shows the locked results
-   instead of scoring Test again.
+   instead of scoring Test again. The lock records the policy hash
+   (`9bd722a9...`), the Test features hash and the headline metrics, so a later run
+   can prove it used the same model, threshold and data.
 5. Outputs (figures, tables, model comparison numbers) written to
    `reports/figures/` and `reports/tables/` must match what's pasted into the
    final report 1:1; if a notebook is re-run and a number changes, the report

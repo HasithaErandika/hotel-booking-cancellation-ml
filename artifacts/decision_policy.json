@@ -1,0 +1,49 @@
+{
+  "model_id": "xgboost__day_zero",
+  "model_path": "models/xgboost__day_zero.joblib",
+  "model_sha256": "3d6a71b0832cc287a6ee7a9a74719f94ab7a01176c8c7c4a816909f2d8bd3a8f",
+  "bundle_path": "models/final_model_calibrated.joblib",
+  "bundle_sha256": "7038a470b8ccbfa2cf63e22ce21cad7a8510ea8c234b21cafe2d9887e8389c90",
+  "calibration_method": "sigmoid",
+  "operating_threshold": 0.35,
+  "tiers": {
+    "Low": [
+      0.0,
+      0.18
+    ],
+    "Medium": [
+      0.18,
+      0.35
+    ],
+    "High": [
+      0.35,
+      1.0
+    ]
+  },
+  "cost_assumptions": {
+    "loss_if_unmanaged": 0.3,
+    "loss_if_managed": 0.1,
+    "follow_up_cost": 15.0,
+    "friction_cost": 10.0,
+    "median_booking_value": 303.0,
+    "per_outcome_costs": {
+      "fn": 90.89999999999999,
+      "tp": 45.3,
+      "fp": 25.0,
+      "tn": 0.0
+    }
+  },
+  "selected_on": "dev",
+  "dev_out_of_fold": {
+    "precision": 0.6473224817173862,
+    "recall": 0.7697054698457223,
+    "f1": 0.7032291132752435,
+    "flag_rate": 0.3243057149414735,
+    "cost_per_1000": 18078.7315431107,
+    "no_model_cost_per_1000": 24792.173513885697,
+    "brier": 0.1142236269030194
+  },
+  "policy_sha256": "9bd722a9865d6141c5ad665f14dcbfc469dfb7752e00d8e876dd5bbd98c9e331",
+  "created_at": "2026-10-11T16:07:07+00:00",
+  "notebook": "12_calibration_threshold_policy.ipynb"
+}

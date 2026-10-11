@@ -1,0 +1,32 @@
+{
+  "evaluated_at": "2026-10-11T16:10:09+00:00",
+  "policy_sha256": "9bd722a9865d6141c5ad665f14dcbfc469dfb7752e00d8e876dd5bbd98c9e331",
+  "model_id": "xgboost__day_zero",
+  "test_features_sha256": "82adb2a27e52b63cce172d2d978d1d15a2554f2711e070b8dae7559293dce38e",
+  "headline_metrics": {
+    "pr_auc": 0.7736542716887844,
+    "roc_auc": 0.8950262460647133,
+    "precision": 0.6530131826741996,
+    "recall": 0.7781206171107994,
+    "f1": 0.7100985536925637,
+    "brier": 0.11344512203700312,
+    "accuracy": 0.8267156300206564
+  },
+  "expected_cost_per_1000": {
+    "model": 17933.907122637902,
+    "no_model": 24792.173513885697
+  },
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.2.0",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  }
+}

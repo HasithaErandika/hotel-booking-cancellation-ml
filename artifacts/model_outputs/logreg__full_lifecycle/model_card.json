@@ -1,0 +1,88 @@
+{
+  "model_id": "logreg__full_lifecycle",
+  "model_key": "logreg",
+  "variant": "full_lifecycle",
+  "notebook": "05_baseline_logistic_regression.ipynb",
+  "preprocessor_family": "linear",
+  "imbalance_strategy": "class_weight",
+  "cv": {
+    "type": "StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "n_rows": 60996
+  },
+  "n_fit_rows": 60996,
+  "n_dev_rows": 13071,
+  "data_files_read": [
+    "data/processed/features/train.csv",
+    "data/processed/features/dev.csv"
+  ],
+  "input_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3"
+  },
+  "best_params": {
+    "model__C": 0.03162277660168379,
+    "model__class_weight": null
+  },
+  "cv_summary": {
+    "accuracy": {
+      "mean": 0.8088890758312626,
+      "std": 0.002415131468107211
+    },
+    "balanced_accuracy": {
+      "mean": 0.7210184702186724,
+      "std": 0.004001347188445688
+    },
+    "f1": {
+      "mean": 0.6009732805656152,
+      "std": 0.006405661472417212
+    },
+    "pr_auc": {
+      "mean": 0.7012656185319033,
+      "std": 0.006284058499541932
+    },
+    "precision": {
+      "mean": 0.6979497199440541,
+      "std": 0.0046681424833937175
+    },
+    "recall": {
+      "mean": 0.5276791288062703,
+      "std": 0.007761646425929893
+    },
+    "roc_auc": {
+      "mean": 0.8640833079526651,
+      "std": 0.002413828645431879
+    },
+    "brier": {
+      "mean": 0.1295173234610001,
+      "std": 0.001064066918451689
+    }
+  },
+  "dev_quick": {
+    "pr_auc": 0.7029613839154726,
+    "roc_auc": 0.8640206569173555,
+    "brier": 0.12928152486597477
+  },
+  "fit_seconds": 30.15,
+  "model_path": "models/logreg__full_lifecycle.joblib",
+  "model_sha256": "cc22ff36ed8858526bc74f03252a66ad6b06eecd634b6ea35d50280e60d05a08",
+  "random_state": 42,
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  },
+  "created_at": "2026-10-11T14:19:09+00:00",
+  "solver_iterations": 84,
+  "converged": true
+}

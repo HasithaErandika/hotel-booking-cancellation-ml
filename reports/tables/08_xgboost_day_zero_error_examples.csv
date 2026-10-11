@@ -1,0 +1,31 @@
+,,booking_id,hotel,market_segment,deposit_type,lead_time,customer_type,y_true,y_proba
+false_negative,222,1525,Resort Hotel,Groups,No Deposit,4,Transient-Party,1,0.003010494
+false_negative,6609,58478,City Hotel,Groups,No Deposit,28,Transient-Party,1,0.0033054936
+false_negative,7460,70258,City Hotel,Offline TA/TO,No Deposit,22,Transient,1,0.0036159721
+false_negative,1176,10726,Resort Hotel,Online TA,No Deposit,40,Transient,1,0.0065735285
+false_negative,8111,78577,City Hotel,Corporate,No Deposit,1,Transient,1,0.0069017163
+false_negative,8475,82712,City Hotel,Direct,No Deposit,1,Transient,1,0.007442738
+false_negative,2256,19823,Resort Hotel,Offline TA/TO,No Deposit,23,Transient,1,0.0084183095
+false_negative,8158,78962,City Hotel,Corporate,No Deposit,0,Transient,1,0.00866866
+false_negative,967,8719,Resort Hotel,Online TA,No Deposit,6,Transient,1,0.008827695
+false_negative,1146,10392,Resort Hotel,Groups,No Deposit,8,Transient-Party,1,0.009775421
+false_negative,997,9074,Resort Hotel,Online TA,No Deposit,0,Transient-Party,1,0.009813931
+false_negative,1185,10784,Resort Hotel,Online TA,No Deposit,26,Transient,1,0.010204999
+false_negative,5659,47710,City Hotel,Offline TA/TO,No Deposit,13,Transient,1,0.01125362
+false_negative,2204,19503,Resort Hotel,Online TA,No Deposit,11,Transient,1,0.011862088
+false_negative,7842,73598,City Hotel,Online TA,No Deposit,116,Transient,1,0.012200941
+false_positive,2068,18240,Resort Hotel,Online TA,No Deposit,163,Transient,0,0.93892664
+false_positive,4791,38225,Resort Hotel,Online TA,No Deposit,335,Transient,0,0.9301152
+false_positive,4652,37300,Resort Hotel,Online TA,No Deposit,157,Transient,0,0.9259348
+false_positive,4392,35462,Resort Hotel,Groups,No Deposit,124,Contract,0,0.92513776
+false_positive,3340,27413,Resort Hotel,Online TA,No Deposit,29,Transient,0,0.9233701
+false_positive,332,2458,Resort Hotel,Online TA,No Deposit,95,Transient,0,0.9160213
+false_positive,12093,111513,City Hotel,Offline TA/TO,No Deposit,307,Transient-Party,0,0.9118193
+false_positive,5731,48350,City Hotel,Online TA,No Deposit,78,Transient,0,0.9046275
+false_positive,4216,34212,Resort Hotel,Online TA,No Deposit,246,Transient,0,0.90319014
+false_positive,4413,35645,Resort Hotel,Groups,No Deposit,252,Transient-Party,0,0.8958746
+false_positive,11930,110106,City Hotel,Online TA,No Deposit,168,Transient,0,0.8920092
+false_positive,4604,36959,Resort Hotel,Offline TA/TO,No Deposit,137,Contract,0,0.8892986
+false_positive,3775,30949,Resort Hotel,Online TA,No Deposit,130,Transient,0,0.8890153
+false_positive,11767,108765,City Hotel,Online TA,No Deposit,237,Transient,0,0.88860226
+false_positive,3218,26472,Resort Hotel,Online TA,No Deposit,126,Transient,0,0.8882338

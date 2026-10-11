@@ -1,0 +1,85 @@
+{
+  "model_id": "dummy_most_frequent__baseline",
+  "model_key": "dummy_most_frequent",
+  "variant": "baseline",
+  "notebook": "05_baseline_logistic_regression.ipynb",
+  "preprocessor_family": "linear",
+  "imbalance_strategy": "none",
+  "cv": {
+    "type": "StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "n_rows": 60996
+  },
+  "n_fit_rows": 60996,
+  "n_dev_rows": 13071,
+  "data_files_read": [
+    "data/processed/features/train.csv",
+    "data/processed/features/dev.csv"
+  ],
+  "input_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3"
+  },
+  "best_params": {
+    "strategy": "most_frequent"
+  },
+  "cv_summary": {
+    "pr_auc": {
+      "mean": 0.2727555900174564,
+      "std": 3.957282317310208e-05
+    },
+    "roc_auc": {
+      "mean": 0.5,
+      "std": 0.0
+    },
+    "f1": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "precision": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "recall": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "balanced_accuracy": {
+      "mean": 0.5,
+      "std": 0.0
+    },
+    "accuracy": {
+      "mean": 0.7272444099825436,
+      "std": 3.9572823173120895e-05
+    },
+    "brier": {
+      "mean": 0.2727555900174564,
+      "std": 3.957282317310208e-05
+    }
+  },
+  "dev_quick": {
+    "pr_auc": 0.27274118277101983,
+    "roc_auc": 0.5,
+    "brier": 0.27274118277101983
+  },
+  "fit_seconds": 2.76,
+  "model_path": "models/dummy_most_frequent__baseline.joblib",
+  "model_sha256": "2efd6e20f851fd669d3d9f3ee0604865604cf3b0de220423f4538c0dc514a1e8",
+  "random_state": 42,
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  },
+  "created_at": "2026-10-11T14:17:59+00:00"
+}

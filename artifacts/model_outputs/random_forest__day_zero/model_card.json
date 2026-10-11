@@ -1,0 +1,89 @@
+{
+  "model_id": "random_forest__day_zero",
+  "model_key": "random_forest",
+  "variant": "day_zero",
+  "notebook": "07_random_forest.ipynb",
+  "preprocessor_family": "tree",
+  "imbalance_strategy": "class_weight",
+  "cv": {
+    "type": "StratifiedKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "n_rows": 60996
+  },
+  "n_fit_rows": 60996,
+  "n_dev_rows": 13071,
+  "data_files_read": [
+    "data/processed/features/train.csv",
+    "data/processed/features/dev.csv"
+  ],
+  "input_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3"
+  },
+  "best_params": {
+    "model__n_estimators": 200,
+    "model__min_samples_leaf": 2,
+    "model__max_features": 0.3,
+    "model__max_depth": 30,
+    "model__class_weight": "balanced_subsample"
+  },
+  "cv_summary": {
+    "accuracy": {
+      "mean": 0.8311036419271132,
+      "std": 0.0021797799803937134
+    },
+    "balanced_accuracy": {
+      "mean": 0.7835094882253012,
+      "std": 0.001250070626439324
+    },
+    "f1": {
+      "mean": 0.6867614329574235,
+      "std": 0.002058967193923918
+    },
+    "pr_auc": {
+      "mean": 0.7588905549545316,
+      "std": 0.004607564669604463
+    },
+    "precision": {
+      "mean": 0.6950093485961988,
+      "std": 0.0073469031392536235
+    },
+    "recall": {
+      "mean": 0.6787887129777346,
+      "std": 0.005200429618251242
+    },
+    "roc_auc": {
+      "mean": 0.8912894915607353,
+      "std": 0.0020949029475923688
+    },
+    "brier": {
+      "mean": 0.11758175594334155,
+      "std": 0.0011013446190043207
+    }
+  },
+  "dev_quick": {
+    "pr_auc": 0.7631609434734415,
+    "roc_auc": 0.8910056363604709,
+    "brier": 0.11821094661442408
+  },
+  "fit_seconds": 401.9,
+  "model_path": "models/random_forest__day_zero.joblib",
+  "model_sha256": "d2e8fca5a7db750a1f0c73628a12ed039538b69d86a792b01ad3de32298eeb5a",
+  "random_state": 42,
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  },
+  "created_at": "2026-10-11T15:05:22+00:00"
+}

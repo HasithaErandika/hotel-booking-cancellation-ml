@@ -46,7 +46,7 @@ owning at least one model end-to-end** (§5.0).
 This section documents models the team considered and rejected, and why; this
 is itself evidence of critical judgement, not a gap in the comparison.
 
-- **Deep Neural Network, rejected.** Training data is ~61,177 rows (Train
+- **Deep Neural Network, rejected.** Training data is 60,996 rows (Train
   split, §4.10) of mixed categorical/continuous tabular features. This is not
   "too little data to train one", a deep net will fit without erroring, it is
   too little data for a deep architecture's added capacity to pay off. Published
@@ -90,7 +90,7 @@ Per §4.6 of `04-preprocessing-feature-engineering.md`, we deliberately train an
 report **two variants** of every model (at minimum for the final chosen model):
 
 1. **"Day-zero" variant**: excludes `booking_changes`, `days_in_waiting_list`,
-   and any room-reassignment feature; uses only information realistically known the
+   `required_car_parking_spaces` (decision #22) and any room-reassignment feature; uses only information realistically known the
    moment the booking is created.
 2. **"Full-lifecycle" variant**: includes those fields, representing what could be
    predicted if the hotel re-scores a booking partway through its life (e.g. a
@@ -124,7 +124,7 @@ Train and Dev.
 - **Stratified K-Fold (k=5)** on the **Train** split only, stratified on
   `is_canceled`, `random_state=42`, so each fold preserves the ~73/27 class
   balance. k=5 is chosen over k=10 because Train already has ~61K rows; each
-  fold (~12K rows, ~4,500 positives) is large enough for a stable estimate, so
+  fold (~12,200 rows, ~3,300 positives) is large enough for a stable estimate, so
   k=10 would roughly double compute for negligible variance reduction.
 - Hyperparameter search (`RandomizedSearchCV`, `n_iter≈40-60` for XGBoost's
   6-parameter space; `GridSearchCV` acceptable for Decision Tree/Random Forest's
@@ -137,7 +137,49 @@ Train and Dev.
   the final numbers reported in `06-evaluation-plan.md` §6.4. Evaluating every
   candidate model on Test would itself leak information through repeated
   comparisons, even without ever calling `.fit()` on it.
-- Once a final model is chosen, a **RepeatedStratifiedKFold (5 folds × 3
-  repeats)** on that single model only is used to report a mean ± std robustness
-  check; not run across the full hyperparameter search grid, which would be
-  wasteful.
+- Robustness of the chosen model is reported with the 5-fold CV standard deviation,
+  1,000-sample bootstrap confidence intervals on Dev and Test, and a temporal check
+  (train on 2015 to 2016, test on 2017). The planned RepeatedStratifiedKFold (5 x 3)
+  was not run: the 5-fold SD of the winner was already small (0.0023) and the
+  bootstrap CIs answer the same question (decision #29).
+
+## 5.6 Results (notebooks 05 to 11)
+
+All 11 models passed the validation gate (notebook 10). Numbers below are 5-fold CV
+on Train (`reports/tables/model_comparison_cv.csv`).
+
+| Model | Tuned settings (best of search) | CV PR-AUC day-zero | CV PR-AUC full-lifecycle |
+|---|---|---:|---:|
+| Dummy (stratified / most frequent) | none | 0.273 | 0.273 |
+| Logistic Regression | `C = 0.1`, `class_weight = None` | 0.651 ± 0.006 | 0.701 ± 0.006 |
+| Decision Tree | entropy, `min_samples_leaf = 100`, no depth cap | 0.700 ± 0.003 | 0.745 ± 0.005 |
+| Random Forest | 200 trees, depth 30, `max_features = 0.3`, `balanced_subsample` | 0.759 ± 0.005 | 0.793 ± 0.004 |
+| XGBoost | depth 10, learning rate 0.029, 610 rounds (early stop on Dev), `scale_pos_weight = 1` | **0.765 ± 0.002** | **0.805 ± 0.003** |
+| SVM (RBF) | `C = 31.4`, `gamma = 0.0034` (12,000-row CV subsample) | 0.677 ± 0.014 | not built |
+
+What the results show:
+
+- **Every model beats the baseline by a wide margin.** The weakest real model
+  (Logistic Regression, 0.651) is 2.4 times the no-skill PR-AUC of 0.273.
+- **Trees and ensembles beat the linear model.** XGBoost and Random Forest are about
+  0.11 PR-AUC above Logistic Regression. The corrected paired t-test (Nadeau and
+  Bengio) gives p < 0.001 for every gap except one.
+- **XGBoost vs Random Forest is a near tie.** The gap is 0.0065 PR-AUC with p = 0.054,
+  so it is not significant at the 5% level. It is still larger than the selection
+  tolerance of 0.005 (the rule in §5.4), so XGBoost is selected. Random Forest is a
+  credible fallback with almost the same ranking quality; XGBoost has the better Brier
+  score on Dev (0.114 vs 0.118) and a lower fold-to-fold SD.
+- **Class weighting was not always the winner.** When the search was free to choose,
+  Logistic Regression picked `class_weight = None` and XGBoost picked
+  `scale_pos_weight = 1`. The threshold step in notebook 12 handles the imbalance
+  instead, which is the cleaner place for it.
+- **Post-booking fields add real but modest signal.** Full-lifecycle beats day-zero
+  by 0.034 to 0.051 PR-AUC (4.5% to 7.8% relative) for every model. Most of the
+  predictive power is already there at booking time.
+- **The SVM was the weakest non-linear model** (0.677, and the noisiest because of the
+  subsample). Exact kernel SVMs do not scale to the full 61K rows, which confirms the
+  trade-off noted in §5.1.
+
+**Selected model: `xgboost__day_zero`** (`artifacts/model_selection.json`). It is the
+best day-zero model on CV PR-AUC, no other model is within the tolerance, and it uses
+only booking-time information.

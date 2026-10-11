@@ -163,6 +163,11 @@ levels Train never saw (rare countries, agents and companies). They go into the
   evaluation time (`06-evaluation-plan.md` §6.5) is the other main lever.
 - Evidence rather than assumption: the Logistic Regression grid in notebook 05
   compares `class_weight="balanced"` against `None`.
+- **Result:** when given the choice, the searches did not pick weighting. Logistic
+  Regression chose `class_weight=None` and XGBoost chose `scale_pos_weight=1`. Decision
+  Tree, Random Forest (`balanced_subsample`) and SVM kept weighting. The imbalance is
+  then handled by the calibrated 0.35 threshold in notebook 12, not by 0.5 on
+  re-weighted scores.
 - SMOTE remains a **documented alternative**. If ever used, it must be applied only
   inside training folds (via an `imblearn` pipeline), never before the split. The
   validation gate checks that each model was fitted on exactly the Train row count,

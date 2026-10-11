@@ -81,6 +81,33 @@ All of them must finish before notebook 10.
 about 15–25 min, 09 about 20–40 min, 10–14 a few minutes. Search budgets (`N_ITER`,
 sample sizes) sit in each notebook's configuration cell.
 
+**Memory:** the saved Random Forest is about 200 MB. Permutation importance in notebooks
+07 and 13 runs in one process (`PERMUTATION_JOBS = 1`) because `n_jobs=-1` copies the
+model into every worker and can fill the RAM. The model still predicts on all cores.
+
+---
+
+## Results
+
+Selected model: **XGBoost, day-zero variant** (booking-time data only), sigmoid
+calibrated, threshold 0.35. Test set read once in notebook 14.
+
+| Model (day-zero) | CV PR-AUC | Dev PR-AUC |
+|---|---:|---:|
+| Dummy baseline | 0.273 | 0.273 |
+| Logistic Regression | 0.651 | 0.651 |
+| SVM (RBF) | 0.677 | 0.689 |
+| Decision Tree | 0.700 | 0.709 |
+| Random Forest | 0.759 | 0.763 |
+| **XGBoost** | **0.765** | **0.771** |
+
+Final Test (13,071 bookings): **PR-AUC 0.774** (95% CI 0.760 to 0.787), ROC-AUC 0.895,
+recall 0.778, precision 0.653, F1 0.710. The High risk tier holds 32.5% of bookings
+and 77.8% of all cancellations. Main caveats: performance drops on a later year
+(2017 PR-AUC 0.650), recall is low for Direct and Corporate bookings, and error rates
+differ by country. Details in [`docs/06-evaluation-plan.md`](docs/06-evaluation-plan.md)
+and [`docs/07-recommendation-limitations.md`](docs/07-recommendation-limitations.md).
+
 ---
 
 ## How the notebooks share work

@@ -1,0 +1,21 @@
+,,booking_id,hotel,market_segment,deposit_type,customer_type,lead_time,previous_cancellations,total_of_special_requests,p_cal
+false_negative,222,1525,Resort Hotel,Groups,No Deposit,Transient-Party,4,0,0,0.004073980279462001
+false_negative,6609,58478,City Hotel,Groups,No Deposit,Transient-Party,28,0,0,0.004448583188688309
+false_negative,7460,70258,City Hotel,Offline TA/TO,No Deposit,Transient,22,0,0,0.004840683712046805
+false_negative,1176,10726,Resort Hotel,Online TA,No Deposit,Transient,40,0,0,0.008492829186366735
+false_negative,8111,78577,City Hotel,Corporate,No Deposit,Transient,1,0,1,0.008890889044071672
+false_negative,8475,82712,City Hotel,Direct,No Deposit,Transient,1,0,0,0.009544589190228946
+false_negative,2256,19823,Resort Hotel,Offline TA/TO,No Deposit,Transient,23,0,0,0.010716101996993193
+false_negative,8158,78962,City Hotel,Corporate,No Deposit,Transient,0,0,1,0.011015344148342262
+false_negative,967,8719,Resort Hotel,Online TA,No Deposit,Transient,6,0,2,0.011205158089401212
+false_negative,1146,10392,Resort Hotel,Groups,No Deposit,Transient-Party,8,0,0,0.012332040487179487
+false_positive,2068,18240,Resort Hotel,Online TA,No Deposit,Transient,163,0,1,0.9269978204837037
+false_positive,4791,38225,Resort Hotel,Online TA,No Deposit,Transient,335,0,0,0.9172548692528109
+false_positive,4652,37300,Resort Hotel,Online TA,No Deposit,Transient,157,0,0,0.9126673045718433
+false_positive,4392,35462,Resort Hotel,Groups,No Deposit,Contract,124,0,0,0.9117950380155947
+false_positive,3340,27413,Resort Hotel,Online TA,No Deposit,Transient,29,0,0,0.9098632068087371
+false_positive,332,2458,Resort Hotel,Online TA,No Deposit,Transient,95,0,2,0.9018694259233949
+false_positive,12093,111513,City Hotel,Offline TA/TO,No Deposit,Transient-Party,307,0,0,0.897324574458764
+false_positive,5731,48350,City Hotel,Online TA,No Deposit,Transient,78,0,0,0.8895868888161594
+false_positive,4216,34212,Resort Hotel,Online TA,No Deposit,Transient,246,0,0,0.8880463324480551
+false_positive,4413,35645,Resort Hotel,Groups,No Deposit,Transient-Party,252,0,0,0.880234599946876

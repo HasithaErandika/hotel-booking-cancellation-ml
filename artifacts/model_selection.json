@@ -1,0 +1,32 @@
+{
+  "created_at": "2026-10-11T16:05:58+00:00",
+  "notebook": "11_model_evaluation_comparison.ipynb",
+  "policy": {
+    "preferred_variant": "day_zero",
+    "primary_metric": "pr_auc",
+    "tolerance": "max(best model CV SD, 0.005)",
+    "tie_breaker": "most interpretable model within tolerance",
+    "interpretability_rank": {
+      "logreg": 1,
+      "decision_tree": 2,
+      "random_forest": 3,
+      "xgboost": 4,
+      "svm_rbf": 5
+    },
+    "must_beat_baseline": "dummy_stratified__baseline on CV PR-AUC"
+  },
+  "selected_model_id": "xgboost__day_zero",
+  "selected_model_path": "models/xgboost__day_zero.joblib",
+  "selected_cv_pr_auc": {
+    "mean": 0.7654160989884039,
+    "std": 0.002298957093459008
+  },
+  "best_scoring_model_id": "xgboost__day_zero",
+  "tolerance": 0.005,
+  "shortlist": [
+    "xgboost__day_zero"
+  ],
+  "baseline_cv_pr_auc": 0.2734578719154206,
+  "rationale": "xgboost__day_zero is the most interpretable day_zero model within 0.0050 CV PR-AUC of the best (xgboost__day_zero).",
+  "gate_report_created_at": "2026-10-11T16:01:27+00:00"
+}
