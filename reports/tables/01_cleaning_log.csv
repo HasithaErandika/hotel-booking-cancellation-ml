@@ -1,0 +1,7 @@
+step,description,rows_before,rows_after,values_or_rows_affected
+add_booking_id,Added booking_id = raw row number (traceability),119390,119390,0
+drop_leakage_columns,"Dropped target-leakage columns ['reservation_status', 'reservation_status_date'] (decisions #3, #20)",119390,119390,0
+drop_exact_duplicates,"Dropped exact duplicates on modelling columns, kept first (decision #4)",119390,87138,32252
+fix_negative_adr,"Set negative adr to 0 (invalid price, decision #8)",87138,87138,1
+impute_and_cap_children,"children: NaN -> 0 (4), capped at 3 (1)",87138,87138,5
+encode_structural_missing,agent/company -> string IDs with 'No Agent'/'No Company'; country NaN -> 'Unknown',87138,87138,94501

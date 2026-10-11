@@ -1,0 +1,120 @@
+{
+  "created_at": "2026-10-11T13:48:26+00:00",
+  "notebook": "01_data_ingestion_quality_cleaning.ipynb",
+  "raw": {
+    "path": "data/hotel_bookings.csv",
+    "sha256": "7c2ae42a7353905ea136e5c2287f17c92c5435826598bfbb8491c6f0c7b1fc06",
+    "shape": [
+      119390,
+      32
+    ]
+  },
+  "clean": {
+    "path": "data/interim/hotel_bookings_clean.csv",
+    "sha256": "5d16feaccd542629cf10286c66990064ae13c2ee5424d95ad26c8079e782cd9a",
+    "shape": [
+      87138,
+      31
+    ],
+    "columns": {
+      "booking_id": "int64",
+      "hotel": "str",
+      "is_canceled": "int64",
+      "lead_time": "int64",
+      "arrival_date_year": "int64",
+      "arrival_date_month": "str",
+      "arrival_date_week_number": "int64",
+      "arrival_date_day_of_month": "int64",
+      "stays_in_weekend_nights": "int64",
+      "stays_in_week_nights": "int64",
+      "adults": "int64",
+      "children": "int64",
+      "babies": "int64",
+      "meal": "str",
+      "country": "object",
+      "market_segment": "str",
+      "distribution_channel": "str",
+      "is_repeated_guest": "int64",
+      "previous_cancellations": "int64",
+      "previous_bookings_not_canceled": "int64",
+      "reserved_room_type": "str",
+      "assigned_room_type": "str",
+      "booking_changes": "int64",
+      "deposit_type": "str",
+      "agent": "object",
+      "company": "object",
+      "days_in_waiting_list": "int64",
+      "customer_type": "str",
+      "adr": "float64",
+      "required_car_parking_spaces": "int64",
+      "total_of_special_requests": "int64"
+    },
+    "positive_rate": 0.27275126810346806,
+    "n_label_conflict_groups": 265
+  },
+  "leakage_columns_dropped": [
+    "reservation_status",
+    "reservation_status_date"
+  ],
+  "duplicates": {
+    "all_columns": 31994,
+    "modelling_columns": 32252
+  },
+  "cleaning_log": [
+    {
+      "step": "add_booking_id",
+      "description": "Added booking_id = raw row number (traceability)",
+      "rows_before": 119390,
+      "rows_after": 119390,
+      "values_or_rows_affected": 0
+    },
+    {
+      "step": "drop_leakage_columns",
+      "description": "Dropped target-leakage columns ['reservation_status', 'reservation_status_date'] (decisions #3, #20)",
+      "rows_before": 119390,
+      "rows_after": 119390,
+      "values_or_rows_affected": 0
+    },
+    {
+      "step": "drop_exact_duplicates",
+      "description": "Dropped exact duplicates on modelling columns, kept first (decision #4)",
+      "rows_before": 119390,
+      "rows_after": 87138,
+      "values_or_rows_affected": 32252
+    },
+    {
+      "step": "fix_negative_adr",
+      "description": "Set negative adr to 0 (invalid price, decision #8)",
+      "rows_before": 87138,
+      "rows_after": 87138,
+      "values_or_rows_affected": 1
+    },
+    {
+      "step": "impute_and_cap_children",
+      "description": "children: NaN -> 0 (4), capped at 3 (1)",
+      "rows_before": 87138,
+      "rows_after": 87138,
+      "values_or_rows_affected": 5
+    },
+    {
+      "step": "encode_structural_missing",
+      "description": "agent/company -> string IDs with 'No Agent'/'No Company'; country NaN -> 'Unknown'",
+      "rows_before": 87138,
+      "rows_after": 87138,
+      "values_or_rows_affected": 94501
+    }
+  ],
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  }
+}

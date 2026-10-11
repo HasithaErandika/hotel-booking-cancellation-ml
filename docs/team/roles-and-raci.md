@@ -1,13 +1,13 @@
 # Team Roles and RACI Matrix
 
 Team: 4 members. Architecture is "shared data contract, shared preprocessing
-pipeline, independent model per member" — see
+pipeline, independent model per member"; see
 [`../02-workflow-and-architecture.md`](../02-workflow-and-architecture.md) §2.3
 for the ownership diagram. No one works from a private copy of the data or a
 private preprocessing step; everyone consumes the same pipeline outputs.
 
 > **Non-negotiable rule:** every member must personally train, tune, and log at
-> least one model end-to-end into the shared evaluation table — contributing only
+> least one model end-to-end into the shared evaluation table, contributing only
 > to shared pipeline code (data cleaning, feature engineering) is not sufficient
 > on its own. See `../05-modeling-strategy.md` §5.0.
 
@@ -22,7 +22,7 @@ private preprocessing step; everyone consumes the same pipeline outputs.
 
 Dummy Classifier (naive baseline, category 1) is trained by Bhanuka alongside
 Logistic Regression, since both are needed early to establish the comparison
-floor — see `../05-modeling-strategy.md` §5.1 for the full category breakdown
+floor; see `../05-modeling-strategy.md` §5.1 for the full category breakdown
 (6 models across 5 categories + baseline).
 
 ## RACI matrix
@@ -52,18 +52,18 @@ R = Responsible, A = Accountable, C = Consulted, I = Informed
 | AI-use disclosure (own entries) | R | R | R | R |
 | Final report assembly | C | C | C | **R/A** |
 
-## Definition of Done — applies to every member
+## Definition of Done: applies to every member
 
 A workstream is not "done" until:
 - [ ] The member has personally trained, tuned, and logged **at least one model**
-      end-to-end into the shared evaluation table (§5.0 non-negotiable rule) —
+      end-to-end into the shared evaluation table (§5.0 non-negotiable rule), 
       shared pipeline contributions alone do not satisfy this.
 - [ ] It consumes the **shared** cleaned dataset / preprocessing pipeline, not a
       private copy.
 - [ ] Reproducible: runs top-to-bottom with `RANDOM_STATE = 42` fixed.
 - [ ] Test set was touched at most once, at the very end.
-- [ ] Every non-trivial choice has a row in `../../DECISIONS.md`.
-- [ ] Progress is reflected in `../../PROGRESS.md`.
+- [ ] Every non-trivial choice has a row in `../DECISIONS.md`.
+- [ ] Progress is reflected in `../PROGRESS.md`.
 - [ ] Any AI-tool usage for that workstream is logged in
       `../../ai-usage-disclosure/`.
 - [ ] Peer-reviewed by at least one other member before being merged into the

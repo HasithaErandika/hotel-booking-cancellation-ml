@@ -1,0 +1,172 @@
+{
+  "created_at": "2026-10-11T13:54:46+00:00",
+  "notebook": "04_feature_engineering_preprocessing.ipynb",
+  "source_split_hashes": {
+    "train": "56a35d6c88620f587e359c530c6993a4108672521006ecbeb6dde0f4ff158334",
+    "dev": "e234010f7bb30964e4778e54e05a4db5168e3925e3dc3f0ed0f4aa0e55987750",
+    "test": "bd45d1d37a0cc6ce9bccf7bb586f36f874563f19fd33af931410b42443c98702"
+  },
+  "file_hashes": {
+    "train": "3004a51b2c6dc9daacfc7dba80002af6d58ff38755b09d41d3c6518e3fa0e5f3",
+    "dev": "52bc57213a77f0f4fbc3334d725bc1f4aa0a639dfa36dc15cecb0bc6a9a446a3",
+    "test": "82adb2a27e52b63cce172d2d978d1d15a2554f2711e070b8dae7559293dce38e"
+  },
+  "target": "is_canceled",
+  "id_column": "booking_id",
+  "variants": {
+    "day_zero": {
+      "numeric": [
+        "lead_time",
+        "arrival_date_week_number",
+        "arrival_date_day_of_month",
+        "stays_in_weekend_nights",
+        "stays_in_week_nights",
+        "adults",
+        "children",
+        "babies",
+        "is_repeated_guest",
+        "previous_cancellations",
+        "previous_bookings_not_canceled",
+        "total_of_special_requests",
+        "total_nights",
+        "weekend_night_ratio",
+        "total_guests",
+        "is_family",
+        "is_invalid_guest_count",
+        "total_previous_bookings",
+        "prior_cancellation_rate"
+      ],
+      "adr": [
+        "adr"
+      ],
+      "categorical_low": [
+        "hotel",
+        "meal",
+        "market_segment",
+        "distribution_channel",
+        "deposit_type",
+        "customer_type",
+        "arrival_season",
+        "reserved_room_type"
+      ],
+      "categorical_high": [
+        "country",
+        "agent",
+        "company"
+      ]
+    },
+    "full_lifecycle": {
+      "numeric": [
+        "lead_time",
+        "arrival_date_week_number",
+        "arrival_date_day_of_month",
+        "stays_in_weekend_nights",
+        "stays_in_week_nights",
+        "adults",
+        "children",
+        "babies",
+        "is_repeated_guest",
+        "previous_cancellations",
+        "previous_bookings_not_canceled",
+        "total_of_special_requests",
+        "total_nights",
+        "weekend_night_ratio",
+        "total_guests",
+        "is_family",
+        "is_invalid_guest_count",
+        "total_previous_bookings",
+        "prior_cancellation_rate",
+        "booking_changes",
+        "days_in_waiting_list",
+        "required_car_parking_spaces",
+        "room_type_changed"
+      ],
+      "adr": [
+        "adr"
+      ],
+      "categorical_low": [
+        "hotel",
+        "meal",
+        "market_segment",
+        "distribution_channel",
+        "deposit_type",
+        "customer_type",
+        "arrival_season",
+        "reserved_room_type",
+        "assigned_room_type"
+      ],
+      "categorical_high": [
+        "country",
+        "agent",
+        "company"
+      ]
+    }
+  },
+  "post_booking_columns": [
+    "booking_changes",
+    "days_in_waiting_list",
+    "required_car_parking_spaces",
+    "room_type_changed",
+    "assigned_room_type"
+  ],
+  "leakage_columns": [
+    "reservation_status",
+    "reservation_status_date"
+  ],
+  "excluded_columns": {
+    "booking_id": "Identifier, not a feature",
+    "is_canceled": "Target",
+    "arrival_date_year": "Non-stationary (drift 2015->2017); cannot extrapolate to future years (proposed decision #23)",
+    "arrival_date_month": "Replaced by arrival_season + arrival_date_week_number",
+    "reservation_status": "Target leakage (decisions #3, #20) - already dropped in notebook 01",
+    "reservation_status_date": "Target leakage (decisions #3, #20) - already dropped in notebook 01"
+  },
+  "engineered_features": [
+    "arrival_season",
+    "is_family",
+    "is_invalid_guest_count",
+    "prior_cancellation_rate",
+    "room_type_changed",
+    "total_guests",
+    "total_nights",
+    "total_previous_bookings",
+    "weekend_night_ratio"
+  ],
+  "adr_cap": {
+    "value": 283.6782500000005,
+    "quantile": 0.995,
+    "fitted_on": "train"
+  },
+  "top_n_high_cardinality": 10,
+  "preprocessor_templates": {
+    "linear__day_zero": "artifacts/preprocessors/preprocessor__linear__day_zero.joblib",
+    "tree__day_zero": "artifacts/preprocessors/preprocessor__tree__day_zero.joblib",
+    "linear__full_lifecycle": "artifacts/preprocessors/preprocessor__linear__full_lifecycle.joblib",
+    "tree__full_lifecycle": "artifacts/preprocessors/preprocessor__tree__full_lifecycle.joblib"
+  },
+  "families": {
+    "linear": [
+      "dummy",
+      "logreg",
+      "svm_rbf"
+    ],
+    "tree": [
+      "decision_tree",
+      "random_forest",
+      "xgboost"
+    ]
+  },
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  }
+}

@@ -1,0 +1,43 @@
+feature,origin,role,treatment_linear,treatment_tree,in_day_zero,in_full_lifecycle,rationale
+lead_time,original,numeric,median impute + standardise,median impute,True,True,
+arrival_date_week_number,original,numeric,median impute + standardise,median impute,True,True,
+arrival_date_day_of_month,original,numeric,median impute + standardise,median impute,True,True,
+stays_in_weekend_nights,original,numeric,median impute + standardise,median impute,True,True,
+stays_in_week_nights,original,numeric,median impute + standardise,median impute,True,True,
+adults,original,numeric,median impute + standardise,median impute,True,True,
+children,original,numeric,median impute + standardise,median impute,True,True,
+babies,original,numeric,median impute + standardise,median impute,True,True,
+is_repeated_guest,original,numeric,median impute + standardise,median impute,True,True,
+previous_cancellations,original,numeric,median impute + standardise,median impute,True,True,
+previous_bookings_not_canceled,original,numeric,median impute + standardise,median impute,True,True,
+total_of_special_requests,original,numeric,median impute + standardise,median impute,True,True,
+total_nights,engineered,numeric,median impute + standardise,median impute,True,True,Stay length as one business quantity
+weekend_night_ratio,engineered,numeric,median impute + standardise,median impute,True,True,Leisure vs business-shaped stays
+total_guests,engineered,numeric,median impute + standardise,median impute,True,True,Party size in one measure
+is_family,engineered,numeric,median impute + standardise,median impute,True,True,Interpretable segment flag
+is_invalid_guest_count,engineered,numeric,median impute + standardise,median impute,True,True,Flags 0-guest bookings instead of deleting them (docs/04 section 4.4)
+total_previous_bookings,engineered,numeric,median impute + standardise,median impute,True,True,Denominator for history rate
+prior_cancellation_rate,engineered,numeric,median impute + standardise,median impute,True,True,Strongest history signal as a rate
+adr,original,adr,impute + cap + standardise,impute + cap,True,True,Winsorised at Train 99.5% quantile (284)
+hotel,original,categorical_low,one-hot,one-hot,True,True,
+meal,original,categorical_low,one-hot,one-hot,True,True,
+market_segment,original,categorical_low,one-hot,one-hot,True,True,
+distribution_channel,original,categorical_low,one-hot,one-hot,True,True,
+deposit_type,original,categorical_low,one-hot,one-hot,True,True,
+customer_type,original,categorical_low,one-hot,one-hot,True,True,
+arrival_season,engineered,categorical_low,one-hot,one-hot,True,True,12 months -> 4 seasons
+reserved_room_type,original,categorical_low,one-hot,one-hot,True,True,
+country,original,categorical_high,top-N one-hot,top-N one-hot,True,True,Top-10 one-hot + infrequent bucket; 'Unknown' for missing
+agent,original,categorical_high,top-N one-hot,top-N one-hot,True,True,Top-10 one-hot + infrequent bucket; 'No Agent' for missing
+company,original,categorical_high,top-N one-hot,top-N one-hot,True,True,Top-10 one-hot + infrequent bucket; 'No Company' for missing
+booking_changes,original,numeric,median impute + standardise,median impute,False,True,Accumulates after booking - full-lifecycle only
+days_in_waiting_list,original,numeric,median impute + standardise,median impute,False,True,Accumulates after booking - full-lifecycle only
+required_car_parking_spaces,original,numeric,median impute + standardise,median impute,False,True,Probable arrival-time field (0% cancellation) - full-lifecycle only
+room_type_changed,engineered,numeric,median impute + standardise,median impute,False,True,Room re-assignment flag (full-lifecycle only)
+assigned_room_type,original,categorical_low,one-hot,one-hot,False,True,Known near arrival - full-lifecycle only
+booking_id,original,excluded,-,-,False,False,"Identifier, not a feature"
+is_canceled,original,excluded,-,-,False,False,Target
+arrival_date_year,original,excluded,-,-,False,False,Non-stationary (drift 2015->2017); cannot extrapolate to future years (proposed decision #23)
+arrival_date_month,original,excluded,-,-,False,False,Replaced by arrival_season + arrival_date_week_number
+reservation_status,original,excluded,-,-,False,False,"Target leakage (decisions #3, #20) - already dropped in notebook 01"
+reservation_status_date,original,excluded,-,-,False,False,"Target leakage (decisions #3, #20) - already dropped in notebook 01"

@@ -1,0 +1,49 @@
+{
+  "created_at": "2026-10-11T13:49:54+00:00",
+  "notebook": "02_train_dev_test_split.ipynb",
+  "source": {
+    "path": "data/interim/hotel_bookings_clean.csv",
+    "sha256": "5d16feaccd542629cf10286c66990064ae13c2ee5424d95ad26c8079e782cd9a"
+  },
+  "random_state": 42,
+  "ratios": {
+    "train": 0.7,
+    "dev": 0.15,
+    "test": 0.15
+  },
+  "stratify_on": "is_canceled",
+  "sizes": {
+    "train": 60996,
+    "dev": 13071,
+    "test": 13071
+  },
+  "positives": {
+    "train": 16637,
+    "dev": 3565,
+    "test": 3565
+  },
+  "positive_rate": {
+    "train": 0.2727555905305266,
+    "dev": 0.27274118277101983,
+    "test": 0.27274118277101983
+  },
+  "train_scale_pos_weight": 2.666285989060528,
+  "file_hashes": {
+    "train": "56a35d6c88620f587e359c530c6993a4108672521006ecbeb6dde0f4ff158334",
+    "dev": "e234010f7bb30964e4778e54e05a4db5168e3925e3dc3f0ed0f4aa0e55987750",
+    "test": "bd45d1d37a0cc6ce9bccf7bb586f36f874563f19fd33af931410b42443c98702"
+  },
+  "library_versions": {
+    "python": "3.11.15",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "not installed",
+    "matplotlib": "3.10.9",
+    "seaborn": "0.13.2",
+    "scipy": "1.17.1",
+    "shap": "not installed",
+    "joblib": "1.5.3"
+  }
+}

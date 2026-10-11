@@ -1,0 +1,5 @@
+distribution_channel,n,cancellations,rate,ci_low,ci_high
+TA/TO,48191,14826,0.3077,0.3035,0.3118
+GDS,139,27,0.1942,0.1371,0.2679
+Direct,9136,1366,0.1495,0.1424,0.157
+Corporate,3528,416,0.1179,0.1077,0.129
