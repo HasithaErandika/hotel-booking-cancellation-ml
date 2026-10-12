@@ -29,6 +29,10 @@ Shared preprocessed train/test matrices (from Seneja)
    full-lifecycle).
 5. Gain-based feature importance and false positive / false negative examples,
    used in notebook 13.
+6. `notebooks/11_model_evaluation_comparison.ipynb`: one metric function for every
+   eligible model, CV mean ± SD table, Dev bootstrap confidence intervals, corrected
+   t-test, day-zero vs full-lifecycle comparison and the written selection rule
+   (`artifacts/model_selection.json`).
 
 ## Interfaces
 
@@ -41,10 +45,10 @@ Shared preprocessed train/test matrices (from Seneja)
 
 ## Definition of Done
 
-- [ ] Hyperparameter search is provably CV-only (test set never scored during
+- [x] Hyperparameter search is provably CV-only (test set never scored during
       search; verify by checking the search object was never given test data).
-- [ ] Both leakage-timing variants trained and reported separately.
-- [ ] Final model + probabilities handed to Hasitha in the exact interface the
+- [x] Both leakage-timing variants trained and reported separately.
+- [x] Final model + probabilities handed to Hasitha in the exact interface the
       evaluation framework expects (see `../06-evaluation-plan.md`).
-- [ ] Logged into the shared evaluation comparison table.
+- [x] Logged into the shared evaluation comparison table.
 - [ ] AI tool usage logged in `../../ai-usage-disclosure/member-3-jayashan-guruge.md`.

@@ -2,56 +2,60 @@
 
 *Rubric alignment: Reproducibility, documentation, and AI-use transparency (10 marks)*
 
-This folder is the project's honest record of **where, why, and how** generative
-AI tools (e.g. ChatGPT, Claude/Claude Code, GitHub Copilot) were used, by whom,
-and what was independently verified before being trusted. It exists so the
-marker doesn't have to guess how much of the work is AI-assisted — we say it
-directly, per person, with dates.
+This folder is the project's honest record of **where, why, and how** generative AI
+tools were used, by whom, and what was checked before it was trusted.
 
-## Why we're disclosing this way (not just one blanket statement)
+## Contribution statement
 
-A single "we used AI" sentence at the end of a report can't show *what* was
-actually delegated to a model versus done and checked by a human. Four people
-used AI differently and for different parts of the pipeline, so each member
-keeps their own log:
+Each member owns one model, at least one shared pipeline stage and one part of the
+report, and has reviewed and can explain the notebooks they own (see
+[`../docs/team/roles-and-raci.md`](../docs/team/roles-and-raci.md)).
 
-- [`member-1-bhanuka-samarasinghe.md`](member-1-bhanuka-samarasinghe.md)
-- [`member-2-seneja-ramanayake.md`](member-2-seneja-ramanayake.md)
-- [`member-3-jayashan-guruge.md`](member-3-jayashan-guruge.md)
-- [`member-4-hasitha-erandika.md`](member-4-hasitha-erandika.md)
+- **Bhanuka** wrote the first data ingestion, quality, leakage and EDA notebook.
+- **Seneja** wrote the first split and preprocessing notebooks.
+- **Jayashan** set up the project environment and owns the XGBoost and model
+  comparison notebooks.
+- **Hasitha** designed the workflow and the instructions, and, because the timeline
+  was strict, rebuilt the final pipeline (notebooks 01 to 14) with Claude Code from the
+  earlier notebooks, then made the corrections.
+
+## AI tools used, by member
+
+| Member | Tool | Main use | Log |
+|---|---|---|---|
+| Bhanuka Samarasinghe | Antigravity | Data ingestion, quality audit and EDA code; logistic regression | [member-1-bhanuka-samarasinghe.md](member-1-bhanuka-samarasinghe.md) |
+| Seneja Ramanayake | Antigravity | Train/Dev/Test split and preprocessing pipeline code; tree models | [member-2-seneja-ramanayake.md](member-2-seneja-ramanayake.md) |
+| Jayashan Guruge | Codex | XGBoost tuning; model comparison | [member-3-jayashan-guruge.md](member-3-jayashan-guruge.md) |
+| Hasitha Erandika | Claude Code | Documentation scaffold, the notebook-only rebuild (notebooks 01 to 14), validation, final audit | [member-4-hasitha-erandika.md](member-4-hasitha-erandika.md) |
+
+The current notebooks 01 to 14 were rebuilt with Claude Code on 2026-10-11, starting
+from the members' earlier notebooks (data quality and EDA by Bhanuka, split and
+preprocessing by Seneja). Each owner then reviewed their notebooks against the outputs.
+The details are in each member's log.
 
 Each log follows [`ai-usage-log-template.md`](ai-usage-log-template.md).
 
 ## Team policy on AI use
 
-1. **AI is a drafting/explaining tool, not a source of evidence.** No AI-generated
-   claim about the data, a metric, or a model's behaviour is included in the
-   report unless it was independently checked against actual code output on the
-   real dataset.
-2. **No AI-generated numbers go into the report unverified.** If AI is asked to
-   estimate what a metric might look like, that estimate is never pasted into
-   `docs/06-evaluation-plan.md` or the final report — only numbers produced by
-   actually running the code are.
-3. **Every use is logged at the time it happens**, not reconstructed from memory
-   at submission time. If you used AI and forgot to log it, add the entry as soon
-   as you remember and note that it was logged retroactively.
-4. **Log the honest purpose.** "Used AI to write my entire section" and "used AI
-   to explain what PR-AUC means before I computed it myself" are both fine to
-   disclose — the point is accuracy, not minimising AI use for appearances.
-5. **Code and prose suggested by AI are reviewed by the responsible member**
-   before being committed — the member whose section it is remains accountable
-   for correctness, not the AI tool.
+1. **AI is a drafting and explaining tool, not a source of evidence.** No AI claim about
+   the data, a metric or a model goes into the report unless it was checked against real
+   code output on the real dataset.
+2. **No AI-generated numbers go into the report unchecked.** Only numbers produced by
+   running the notebooks are reported, and each one traces to a file in
+   `reports/tables/`.
+3. **Every use is logged.** If an entry is added late, the log says so.
+4. **Log the honest purpose.** "AI wrote the first version of this notebook" and "AI
+   explained PR-AUC" are both fine to disclose. The point is accuracy.
+5. **The responsible member reviews AI code and text** before it is committed, and stays
+   accountable for its correctness.
 
 ## What "verification performed" means in the log
 
-For each logged use, state concretely what was checked, e.g.:
-- "Ran the suggested pandas code on the actual CSV and confirmed the printed
-  counts matched what's in `docs/03-data-understanding.md`."
-- "Cross-checked the explanation of PR-AUC against the scikit-learn
-  documentation before using it in the report."
-- "Reviewed the generated function line-by-line, tested it on a small sample of
-  rows, and adjusted the missing-value logic to match our actual decision in
-  `DECISIONS.md`."
+For each logged use, state concretely what was checked, for example:
+- "Ran the notebook on the team kernel and confirmed the printed counts match
+  `docs/03-data-understanding.md`."
+- "Checked the explanation of PR-AUC against the scikit-learn documentation."
+- "Read the generated function line by line, tested it on a few rows, and changed the
+  missing-value logic to match `DECISIONS.md`."
 
-A log entry with no verification statement is treated as incomplete — add one
-before submission.
+A log entry with no verification statement is incomplete.

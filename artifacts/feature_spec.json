@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-10-11T14:14:55+00:00",
+  "created_at": "2026-10-12T03:05:40+00:00",
   "notebook": "04_feature_engineering_preprocessing.ipynb",
   "source_split_hashes": {
     "train": "56a35d6c88620f587e359c530c6993a4108672521006ecbeb6dde0f4ff158334",
@@ -116,7 +116,7 @@
   "excluded_columns": {
     "booking_id": "Identifier, not a feature",
     "is_canceled": "Target",
-    "arrival_date_year": "Non-stationary (drift 2015->2017); cannot extrapolate to future years (proposed decision #23)",
+    "arrival_date_year": "Non-stationary (drift 2015->2017); cannot extrapolate to future years (decision #23)",
     "arrival_date_month": "Replaced by arrival_season + arrival_date_week_number",
     "reservation_status": "Target leakage (decisions #3, #20) - already dropped in notebook 01",
     "reservation_status_date": "Target leakage (decisions #3, #20) - already dropped in notebook 01"
@@ -162,11 +162,11 @@
     "numpy": "2.4.6",
     "pandas": "3.0.3",
     "scikit-learn": "1.9.0",
-    "xgboost": "not installed",
+    "xgboost": "3.2.0",
     "matplotlib": "3.10.9",
     "seaborn": "0.13.2",
     "scipy": "1.17.1",
-    "shap": "not installed",
+    "shap": "0.51.0",
     "joblib": "1.5.3"
   }
 }

@@ -1,24 +1,23 @@
-# AI Usage Log — Seneja Ramanayake (Member 2)
+# AI Usage Log: Seneja Ramanayake (Member 2)
 
-Role: Feature Engineering + Preprocessing, Random Forest / Decision Tree. See
+Role: Feature / ML Engineer. Owns notebooks 02, 04, 06 and 07. See
 [`../docs/team/member-2-seneja-ramanayake.md`](../docs/team/member-2-seneja-ramanayake.md).
 
-> This file is a personal, per-session log. Add a row every time you use an AI
-> tool for this project's work — see [`README.md`](README.md) for the policy and
-> [`ai-usage-log-template.md`](ai-usage-log-template.md) for the field guide.
-> Do not leave this file as just the template — declare "no AI used" explicitly
-> if that ends up true, rather than leaving it blank and ambiguous.
+## Tool used
+
+**Antigravity** (AI coding agent). Used for code drafting, debugging and explanations in
+this member's areas. Policy: [`README.md`](README.md).
+
+## Session log
 
 | Date | Tool / Model | Purpose | Prompt (summary) | Output used? | Verification performed | Notes |
 |---|---|---|---|---|---|---|
-| | | | | | | |
+| 2026-09-16 | Antigravity | Code drafting: stratified Train/Dev/Test split and preprocessing pipeline | Build a stratified 70/15/15 split notebook and a shared preprocessing pipeline (feature engineering, encoding, scaling) | Yes: split and preprocessing notebooks (commits `ab8175b`, `96613a5`) | Checked split sizes and class balance per split, and that no booking appears in two splits | Seneja to add the exact prompt and any extra sessions. The custom transformers from this version could not be loaded in other notebooks, so the pipeline was rebuilt from sklearn parts on 2026-10-11 (decision #24). The split method and feature ideas carried over into notebooks 02 and 04. |
 
 ## Note on the initial docs scaffold
 
 The starting structure of `docs/04-preprocessing-feature-engineering.md` and
-`docs/team/member-2-seneja-ramanayake.md` was drafted by Claude Code on
-2026-09-12 as part of whole-project scaffolding (logged in
-[`member-4-hasitha-erandika.md`](member-4-hasitha-erandika.md)). Treat the listed
-features and encoding choices as a starting proposal, not a final decision —
-when you implement `src/features/`, confirm or change each choice, and log
-your own reasoning as a `DECISIONS.md` entry either way.
+`docs/team/member-2-seneja-ramanayake.md` was drafted with Claude Code on 2026-09-12
+(logged in [`member-4-hasitha-erandika.md`](member-4-hasitha-erandika.md)). The final
+feature choices are recorded in `DECISIONS.md` (#6, #7, #8, #22, #23) and checked by the
+assertions in notebook 04.

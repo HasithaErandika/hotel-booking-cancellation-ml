@@ -22,6 +22,8 @@ Status legend: `Not started` · `Ready to run` · `In progress` · `Blocked` · 
 | 2026-10-11 | Notebooks 11 and 12: `xgboost__day_zero` selected (decision #27). Sigmoid calibration, threshold 0.35, tiers 0.18 / 0.35, policy locked (decision #28). |
 | 2026-10-11 | Notebook 13: top drivers country, lead time, agent, special requests, market segment. Weak recall on Direct (0.32) and Corporate (0.43). Fairness audit flags 8 of 11 country groups. SHAP skipped (`shap` not installed, decision #30). |
 | 2026-10-11 | Notebook 14: Test read once. PR-AUC 0.774 [0.760, 0.787], recall 0.778, precision 0.653 at 0.35. High tier = 32.5% of bookings, 77.8% of cancellations. Temporal check (2017): PR-AUC 0.650. Docs 04 to 08 and the decision log updated with the results. |
+| 2026-10-12 | Rubric audit and new `plan.md`. Added: feature screening (notebook 04 §4.4), LR sensitivity checks (05 §6), gate chart (10), fairness bootstrap intervals (13 §6.2b), chart fixes (03, 11, 12, 13), framing canvas (docs/01), decisions #31 and #32. Notebook 11 ownership moved to Jayashan. `shap` 0.51.0 installed. |
+| 2026-10-12 | New cells run. Notebooks 04, 05, 10, 11 and 12 were run in full: scores, predictions, parameters, the policy and the final model are identical (only timestamps changed), and the Test lock still verifies. Results: reduced-input LR 0.6506 vs 0.6507; all fairness flags confirmed by bootstrap intervals; SHAP drivers match permutation importance (decision #33). |
 
 ## Workstream status
 
@@ -39,7 +41,7 @@ Status legend: `Not started` · `Ready to run` · `In progress` · `Blocked` · 
 | XGBoost + tuning | 08 | Jayashan | Done | CV PR-AUC 0.765 (day-zero), 0.805 (full-lifecycle); early stop at round 610 |
 | SVM (RBF) | 09 | Hasitha | Done | CV PR-AUC 0.677 (12,000-row subsample) |
 | Validation gate | 10 | Hasitha | Done | 83 checks, 0 FAIL, 1 WARN; 11 of 11 models eligible |
-| Evaluation, comparison, selection | 11 | Hasitha | Done | Selected `xgboost__day_zero` |
+| Evaluation, comparison, selection | 11 | Jayashan | Done | Selected `xgboost__day_zero` |
 | Calibration, threshold, decision policy | 12 | Hasitha | Done | Sigmoid, threshold 0.35, policy locked |
 | Explainability, errors, fairness | 13 | Hasitha | Done | Permutation importance, error profile, fairness audit; SHAP skipped |
 | Final Test evaluation (once) | 14 | Hasitha | Done | Test PR-AUC 0.774; lock file written |

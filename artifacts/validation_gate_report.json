@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-10-11T16:01:27+00:00",
+  "created_at": "2026-10-12T03:11:49+00:00",
   "notebook": "10_validation_gate.ipynb",
   "global_passed": true,
   "eligible_models": [
@@ -527,10 +527,10 @@
   "model_card_hashes": {
     "decision_tree__day_zero": "4ac183c2793cfe9be8711a430e2d3dc55083c318fda6d0c0997ef1497cb46305",
     "decision_tree__full_lifecycle": "21725cd62918c7b7ba020fb52723a87ddb16b226a07e282b0d23f6f1e02bf0d8",
-    "dummy_most_frequent__baseline": "0a6664096e84d25af17a2ba5710f024ae5b2c4a967eb2bf7329fbf54b9a1cf5b",
-    "dummy_stratified__baseline": "75e3864762f8005b7c0f43f2a64d850897918cda5baef85656137641462f8f81",
-    "logreg__day_zero": "1ba043ad89906676a8cdf2e788433b9d8988dcdd4613fc061907e15c3a74ac69",
-    "logreg__full_lifecycle": "6f6e78867280c3677e2eb5c197b9e89215168976c621c6f8bd7feed0911252fd",
+    "dummy_most_frequent__baseline": "06727aefc155d8c34eff0746699d0b3af17ca965775187c139bf37f86efad411",
+    "dummy_stratified__baseline": "642432bef71ccc8f7152bfa1ccaf8b0859d7cacf720f186f3e6fa9f76da5e2c1",
+    "logreg__day_zero": "4dc788e94ac729c91c556402604a5cdc70339b6f2fbc052a05a48c71198f45ea",
+    "logreg__full_lifecycle": "03ff968a65ae928124154786d2eb25292352433bdbe44ae4f6a3c04973ce020f",
     "random_forest__day_zero": "6cd68ff4f6ea33969798a76a025ce14b69a5105e2d185378754cbd56a985db62",
     "random_forest__full_lifecycle": "8568fb6ddbec5267fba31761062e9ca34cbb9aabe103bfb61e9393a9ce2420a2",
     "svm_rbf__day_zero": "e1aa65f76ea828bee6e9eacb9443e441a9dfc53971e3c3e1504de648f4768196",
@@ -547,7 +547,7 @@
     "matplotlib": "3.10.9",
     "seaborn": "0.13.2",
     "scipy": "1.17.1",
-    "shap": "not installed",
+    "shap": "0.51.0",
     "joblib": "1.5.3"
   }
 }

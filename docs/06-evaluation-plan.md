@@ -208,8 +208,10 @@ The questions we planned to ask, and what the data answered:
   tops XGBoost's built-in gain ranking; gain over-rates a feature that splits a small,
   very pure group. Rank agreement with Logistic Regression is 0.62 (Spearman), so the
   two model families mostly agree on what matters.
-- **SHAP** was not run because `shap` was not installed on the team kernel; the
-  notebook skips that section cleanly. Permutation importance covers the global view.
+- **SHAP** (notebook 13, decision #33): the largest mean absolute SHAP values are
+  `country = PRT` (0.78), `lead_time` (0.58), `total_of_special_requests` (0.51) and
+  `market_segment = Online TA` (0.40), the same drivers as permutation importance.
+  Waterfall plots explain single bookings (`reports/figures/13_shap_waterfall_*.png`).
 
 ### Fairness audit (Dev, threshold 0.35)
 
@@ -223,6 +225,11 @@ to 1.25 (`reports/tables/13_fairness_audit.csv`).
   but more missed cancellations.
 - **Market segment:** every segment with enough data is flagged, mainly the low
   recall for Direct and Corporate and the high FPR for Online TA (1.51 times).
+
+Notebook 13 §6.2b adds 95% bootstrap intervals for each group's TPR gap and FPR ratio
+(`reports/tables/13_fairness_audit_ci.csv`, decision #32). Result: every flag above
+is confirmed by the intervals (8 of 8 country groups, 5 of 5 market segments), so the
+gaps are real and not chance.
 
 These gaps mostly follow differences in base rates between groups (PRT 34% cancel vs
 NLD 15%), but the effect on guests is the same. `country` is the most important

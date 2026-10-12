@@ -37,7 +37,7 @@ room_type_changed,engineered,numeric,median impute + standardise,median impute,F
 assigned_room_type,original,categorical_low,one-hot,one-hot,False,True,Known near arrival - full-lifecycle only
 booking_id,original,excluded,-,-,False,False,"Identifier, not a feature"
 is_canceled,original,excluded,-,-,False,False,Target
-arrival_date_year,original,excluded,-,-,False,False,Non-stationary (drift 2015->2017); cannot extrapolate to future years (proposed decision #23)
+arrival_date_year,original,excluded,-,-,False,False,Non-stationary (drift 2015->2017); cannot extrapolate to future years (decision #23)
 arrival_date_month,original,excluded,-,-,False,False,Replaced by arrival_season + arrival_date_week_number
 reservation_status,original,excluded,-,-,False,False,"Target leakage (decisions #3, #20) - already dropped in notebook 01"
 reservation_status_date,original,excluded,-,-,False,False,"Target leakage (decisions #3, #20) - already dropped in notebook 01"

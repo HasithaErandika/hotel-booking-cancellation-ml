@@ -64,7 +64,7 @@
     "roc_auc": 0.4938720182337043,
     "brier": 0.3988218192946217
   },
-  "fit_seconds": 2.69,
+  "fit_seconds": 2.8,
   "model_path": "models/dummy_stratified__baseline.joblib",
   "model_sha256": "529a72641a6394387ee7a104d735659ccce7892c8743453b2be371a91df09c02",
   "random_state": 42,
@@ -74,12 +74,12 @@
     "numpy": "2.4.6",
     "pandas": "3.0.3",
     "scikit-learn": "1.9.0",
-    "xgboost": "not installed",
+    "xgboost": "3.2.0",
     "matplotlib": "3.10.9",
     "seaborn": "0.13.2",
     "scipy": "1.17.1",
-    "shap": "not installed",
+    "shap": "0.51.0",
     "joblib": "1.5.3"
   },
-  "created_at": "2026-10-11T14:18:01+00:00"
+  "created_at": "2026-10-12T03:06:26+00:00"
 }

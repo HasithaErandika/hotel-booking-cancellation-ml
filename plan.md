@@ -1,338 +1,169 @@
-# Implementation Plan: Hotel Booking Cancellation Prediction
+# Plan: Final Audit, Gap Fixes and Submission
 
-> Status: **active** · Last revised: 2026-10-11 · Maintainer: Hasitha Erandika (Member 4)
+> Status: **active** · Last revised: 2026-10-12 · Replaces the 2026-10-11 plan
+> (notebook-only pipeline), which is finished. The old plan is kept in git history
+> at commit `02cc61a`.
 >
-> This plan replaces the `src/` package with a **notebook-only, artifact-driven
-> pipeline**. Each team member owns one or more notebooks. Notebooks share their
-> results through versioned files on disk (data files, JSON contracts and
-> `joblib` models), not through imported Python modules. The plan lists:
-> (1) what exists today, (2) the issues found in it, (3) the target notebook
-> set, (4) the engineering practices every notebook follows, and (5) what is
-> left for later.
+> **Code fixes done and run on 2026-10-12** (see the Status in §3). The Test lock still verifies.
+
+This plan has five parts: (1) what the old plan delivered, (2) how the project scores
+against the marking rubric today, (3) the gaps found in this audit, (4) a fair split of
+the remaining work across the four members, and (5) the order to do it in.
 
 ---
 
-## 0. TL;DR
+## 1. Old plan: closed
 
-| Item | Decision |
+| Old plan item | Result |
 |---|---|
-| Architecture | `src/` removed. 14 numbered notebooks (`notebooks/01_…` → `notebooks/14_…`), each with one owner and one job. |
-| Hand-off mechanism | Notebooks talk via **artifacts**: CSV data files + JSON contracts (`artifacts/*.json`) + fitted sklearn pipelines (`models/*.joblib`). Every artifact carries a SHA-256 so the downstream notebook can verify it is reading what the upstream notebook wrote. |
-| Shared preprocessing | Built from **sklearn-native components only** (no custom classes, no lambdas) so the pipeline pickles cleanly and loads in any notebook without re-declaring code. |
-| Test set | Read by **exactly one** notebook (`14_final_test_evaluation`), guarded by a lock file. The validation gate (`10_…`) statically scans model notebooks to prove they never reference test data. |
-| Kernel | Python 3.11 (the team's selected kernel). |
-| Biggest new findings | (a) After de-duplication the cancellation rate is **27.28 %**, not 37.04 %. Several documented numbers are pre-dedup and stale. (b) `required_car_parking_spaces > 0` → **0 %** cancellation (7,313 rows), so it is very likely recorded at arrival and must leave the *day-zero* variant. (c) The engineered `room_type_changed` feature was silently dropped by the legacy pipeline. |
+| Notebook-only pipeline `01` to `14` | Done. All 14 notebooks run with every cell executed and no errors. |
+| Issues I-01 to I-19 | Resolved in notebooks 01 to 14 and docs 01 to 08. |
+| New decisions #21 to #28 | Logged, plus #29 and #30. |
+| Doc updates (old §9) | Done. No stale `src/`, 80/20 or 62.96% baseline references left, except where they describe history. |
+| Roadmap F-01 to F-11 | Not started. F-03, F-07, F-10 and F-11 move into this plan. The rest stay as future work (§7). |
+
+Headline results: `xgboost__day_zero` selected, Test PR-AUC 0.774 [0.760, 0.787],
+recall 0.778 and precision 0.653 at threshold 0.35, temporal check PR-AUC 0.650.
 
 ---
 
-## 1. Current-state analysis (before this plan)
+## 2. Rubric check (honest)
 
-### 1.1 What exists
+Verdict key: **Strong** = high-mark evidence exists · **Partial** = evidence exists but
+has a gap a marker will notice · **Weak** = likely to lose marks.
 
-| Area | State |
-|---|---|
-| `docs/01–08` | Thorough, rubric-mapped planning docs. Decisions 1–20 in `DECISIONS.md`. |
-| `src/data/` (now removed) | `ingestion.py` (CSV load), `cleaning.py` (drop leakage cols + dedup), `validation.py` (2 assertions). |
-| `notebooks/01_data_quality_eda.ipynb` | Loads data, leakage crosstab, cleaning, 4 EDA plots. |
-| `notebooks/01_train_dev_test_split.ipynb` | Stratified 70/15/15 split, overlap check, CSV export. |
-| `notebooks/02_preprocessing_pipeline.ipynb` | Custom `HotelFeatureEngineer` + `TopNBucketer` transformers, `ColumnTransformer`, smoke test with a Decision Tree. |
-| Models / evaluation | Nothing yet (Dummy, LR, DT, RF, XGB, SVM, validation gate, calibration, explainability all *Not started*). |
-
-The three legacy notebooks were moved to `notebooks/legacy/` for reference.
-Nothing was deleted from history.
-
-### 1.2 Verified facts that drive this plan
-
-Computed directly from `data/hotel_bookings.csv` on 2026-10-11:
-
-| Fact | Value |
-|---|---|
-| Raw shape | 119,390 × 32 |
-| Rows after dropping the 2 leakage columns and de-duplicating | **87,138** (32,252 duplicates removed) |
-| Target after dedup | 63,371 not-cancelled / 23,767 cancelled → **27.28 % positive** |
-| Majority-class accuracy after dedup | **72.72 %** (docs say 62.96 %, which is pre-dedup) |
-| `scale_pos_weight` (neg/pos) after dedup | ≈ **2.67** |
-| Feature-identical rows with conflicting labels | **265** groups |
-| `required_car_parking_spaces > 0` | 7,313 bookings, **0.0 %** cancelled |
-| `country == "PRT"` | 35.3 % cancelled vs 23.6 % for all others |
-| Cancellation rate by arrival year | 2015: 20.0 % · 2016: 26.2 % · 2017: 31.7 % (drift) |
-| `deposit_type == "Non Refund"` after dedup | only **1,017** rows (14,587 before dedup), 94.6 % cancelled |
-| Zero-guest bookings after dedup | 166 |
-| Zero-night stays after dedup | 651 |
-
----
-
-## 2. Existing issues (audit)
-
-Severity: 🔴 critical (invalidates results) · 🟠 high (biases results / breaks a
-deliverable) · 🟡 medium (quality / maintainability) · ⚪ low (hygiene).
-
-| # | Sev | Issue | Evidence | Resolution (where) |
+| Criterion | Marks | Evidence in the repo | Verdict | Gap (see §3) |
 |---|---|---|---|---|
-| I-01 | 🔴 | **Class balance and baseline numbers in the docs are pre-dedup.** The 37.04 % positive rate, 62.96 % baseline, the split sizes (61,177 / 13,109 / 13,110) and the "~37 % positives per split" are all wrong for the modelling data. | Legacy split notebook printed 27.28 % positive and 60,996 / 13,071 / 13,071. | `01` reconciles every documented number against the data in a table. `02` records the true split sizes. Docs 03/04/05/06 to be updated (§9). |
-| I-02 | 🟠 | **Dedup count mismatch** (docs 31,994 vs code 32,252). The code dedups *after* dropping `reservation_status*`, which also collapses rows that differ only in status date. | Legacy `clean_data` output. | Keep the code's behaviour (rows identical on every modelling column *are* the same training example) and log it as **D-21**. `01` reports both counts. |
-| I-03 | 🟠 | **`required_car_parking_spaces` is a probable post-booking / arrival-time field.** 0 % cancellation for all 7,313 bookings with a parking request is not plausible for a booking-time signal. | Group-by above. | Excluded from the **day-zero** variant and kept in full-lifecycle (**D-22**). `03` visualises it. |
-| I-04 | 🟠 | **`room_type_changed` was engineered but never used.** It is not in `NUMERIC_COLUMNS` and `remainder="drop"` silently discarded it, so the full-lifecycle variant was missing a planned feature. | Legacy `02_preprocessing_pipeline` cell 10/12. | The feature spec in `04` lists every column explicitly, and an assertion checks that every engineered feature is consumed by at least one variant. |
-| I-05 | 🟠 | **Pipeline not picklable / not shareable.** `FunctionTransformer(lambda …)` and classes defined in a notebook (`__main__`) cannot be loaded by another notebook. This blocks the "one shared pipeline" contract. | Legacy `make_preprocessor`. | `04` builds the preprocessor from sklearn-native parts only: `OneHotEncoder(max_categories=…)` replaces `TopNBucketer`, and `FunctionTransformer(np.clip)` replaces the custom ADR cap. Unfitted templates are saved with `joblib`, and a reload test runs in the notebook. |
-| I-06 | 🟠 | **No feature names after preprocessing** (`TopNBucketer` has no `get_feature_names_out`), so SHAP, coefficients and importances can't be labelled. | Legacy pipeline. | Native encoders give `get_feature_names_out()` end-to-end. |
-| I-07 | 🟠 | **Test-set discipline not enforced in code.** Nothing prevented a member from scoring Test repeatedly. | - | Test is read only in `14` behind a lock file. `10` statically scans `05–09` for test references and checks every model card's `data_files_read`. |
-| I-08 | 🟡 | **`arrival_date_year` used as a numeric feature.** The cancellation rate drifts 20 % → 32 % across years, and a model can't extrapolate a year it has never seen (2018+). | Year group-by above. | Excluded from features (**D-23**). `14` adds a temporal robustness check (train 2015–16 → test 2017). |
-| I-09 | 🟡 | **265 feature-identical groups with conflicting labels** (irreducible noise). | Group-by above. | Reported in `01`, kept (removing them would hide real ambiguity), and noted as a ceiling on achievable accuracy. |
-| I-10 | 🟡 | **Validation was trivial.** `validate_schema` checked 2 columns: no hash check, no dtype or category-domain checks, no reconciliation with the docs. | Legacy `validation.py`. | `01` has a full schema contract, SHA-256 check and doc-reconciliation table. `10` has a 12-check validation gate (G1–G5 global, M1–M7 per model). |
-| I-11 | 🟡 | **Data-snooping risk in EDA.** Target-relationship EDA ran on the full dataset, including rows that later became Test. | Legacy `01` notebook. | Data-quality profiling (target-agnostic) stays on full data in `01`. All target-relationship EDA moves to `03` and runs on **Train only**. |
-| I-12 | 🟡 | **Fragile CSV round-trip.** `agent`/`company` came back as floats (`9.0`). Categorical dtypes weren't enforced on reload, and pandas' default `na_values` treats strings like `"None"`/`"NA"` as missing. | Legacy splits. | IDs normalised to clean strings (`"9"`, `"No Agent"`) in `01`. Every loader passes an explicit `dtype=` map, and placeholder labels avoid pandas' NA tokens. |
-| I-13 | 🟡 | **Duplicate notebook numbering** (two `01_*` files) and no stated run order. | `notebooks/`. | Strict `01`→`14` numbering, documented in `README.md`. |
-| I-14 | 🟡 | **Docs drift.** `02-workflow` shows an 80/20 split and 4 models, the ownership diagram omits DT and SVM, docs 02/04/08 and team files reference `src/` modules that no longer exist, and doc 08 says notebooks `01..07`. | `docs/`. | Listed in §9 for the team to update. |
-| I-15 | 🟡 | **`country` may be partly post-booking.** Hotels often confirm nationality at check-in, and PRT bookings cancel much more (35 % vs 24 %). This is a *hypothesis*, not yet proven. | Group-by above. | `03` tests it. `13` runs a with/without-`country` ablation (future item F-03). Kept as a feature until evidence says otherwise. |
-| I-16 | ⚪ | `__pycache__/*.pyc` were committed, no `.gitignore` existed, and generated data (`data/processed/`) was untracked. | `git ls-files`. | `.gitignore` added. `src/` (and its tracked `.pyc`) removed. |
-| I-17 | ⚪ | `shap` missing from `requirements.txt` although explainability needs it. | `requirements.txt`. | `shap` added. Notebook `13` degrades gracefully to permutation importance if it's missing. |
-| I-18 | ⚪ | Seaborn `FutureWarning` (`palette` without `hue`) and ad-hoc plot styling. | Legacy outputs. | One shared plotting style per notebook with a colour-blind-validated palette. No deprecated seaborn calls. |
-| I-19 | ⚪ | The ADR winsorisation cap (99.5th pct) is learned on the full Train split, so CV validation folds see a cap fitted partly on their own rows. | Design. | Effect is negligible (one quantile on 61K rows), but it is **documented** in the feature spec rather than hidden. |
+| Business problem framing | 5 | `docs/01`: stakeholder, decision need, primary and secondary lens, unit of analysis, exact output, rationale, success criteria | Strong | No one-page **problem framing canvas** (listed as core evidence). A-13 |
+| Workflow diagram and decision log | 10 | Mermaid diagrams in `docs/02` and README, 30 decisions with options, reasons and evidence | Strong | None |
+| Data understanding, EDA, data quality | 10 | `docs/03` data dictionary, notebook 01 quality audit, notebook 03 (19 figures, Wilson CIs, MI, Cramér's V, Spearman), EDA insight log | Strong | Minor figure fixes. A-07 |
+| Preprocessing and feature engineering | 15 | Notebook 04, feature spec, feature log, leakage variants, imbalance, ADR cap, unseen-category test | Partial | No explicit **feature selection** step and perfect collinearity in the linear inputs. A-03, A-04 |
+| Model strategy and comparison | 20 | Two dummies + LR, DT, RF, XGBoost, SVM, both variants, written selection rule | Strong | SVM compared on a 12,000-row CV subsample; must be stated next to the chart. A-07 |
+| Evaluation, validation, critical judgement | 20 | Validation gate (83 checks), CV mean ± SD, bootstrap CIs, corrected t-test, calibration, cost-based threshold, error and fairness audit, test-once lock, temporal check | Strong | "Fill in after running" cells in 11 and 13 still empty. SHAP not run. Fairness flags need CIs. A-06, A-09, A-10 |
+| Recommendation, limitations, stakeholder value | 10 | `docs/07` filled with real numbers | Strong | Final report not assembled. A-14 |
+| Reproducibility, documentation, AI-use | 10 | SHA-256 fingerprint, dataset link, artifact hashes, seeds, run order | **Weak** | AI-use logs are empty for two members and do not record the 2026-10-11 Claude Code sessions that wrote notebooks 01 to 14. Ownership in the docs does not match git history. `requirements.txt` has a macOS-only package. A-01, A-02, A-11 |
+
+**Bottom line:** the technical work is at a high-mark level. The two real risks are
+(1) AI-use transparency, which is both a rubric criterion and an academic-integrity
+issue, and (2) the missing feature-selection evidence in the 15-mark preprocessing
+criterion.
 
 ---
 
-## 3. Target architecture
+## 3. Gaps found in this audit
 
-### 3.1 Principles
+Severity: **High** = costs marks or integrity · **Medium** = a marker may notice · **Low** = hygiene.
 
-1. **One notebook = one stage = one owner.** Notebooks are small enough to
-   review and run top-to-bottom ("Restart & Run All") without manual steps.
-2. **Artifacts are the API.** A notebook reads only files declared in its
-   *Inputs* header and writes only files declared in its *Outputs* header.
-3. **Contracts are verified, not trusted.** Every downstream notebook
-   re-hashes its inputs and compares them with the contract written upstream.
-4. **Leakage-safe ordering.** Fixed rules run before the split. Anything
-   learned from data is fitted on Train only. Selection and thresholds use
-   Dev. Test is touched once.
-5. **No hidden state.** All paths, seeds and hyper-parameter spaces live in a
-   clearly marked *Configuration* cell at the top of each notebook.
-
-### 3.2 Data & artifact flow
-
-```mermaid
-flowchart TD
-    RAW[data/hotel_bookings.csv] --> N01[01 Ingestion · Quality · Cleaning]
-    N01 -->|data/interim/hotel_bookings_clean.csv<br/>artifacts/data_contract.json| N02[02 Train/Dev/Test split]
-    N02 -->|data/processed/splits/*.csv<br/>artifacts/split_manifest.json| N03[03 EDA - Train only]
-    N02 --> N04[04 Feature engineering + preprocessing]
-    N04 -->|data/processed/features/*.csv<br/>artifacts/feature_spec.json<br/>artifacts/preprocessors/*.joblib| MODELS
-    subgraph MODELS[Model notebooks - Train + Dev only]
-      N05[05 Dummy + Logistic Regression]
-      N06[06 Decision Tree]
-      N07[07 Random Forest]
-      N08[08 XGBoost]
-      N09[09 SVM RBF]
-    end
-    MODELS -->|models/*.joblib<br/>artifacts/model_outputs/&lt;model_id&gt;/| N10[10 Validation gate]
-    N10 -->|artifacts/validation_gate_report.json| N11[11 Evaluation & model selection]
-    N11 -->|artifacts/model_selection.json| N12[12 Calibration & threshold policy]
-    N12 -->|artifacts/decision_policy.json<br/>models/final_model_calibrated.joblib| N13[13 Explainability · Error · Fairness]
-    N12 --> N14[14 Final test evaluation - ONCE]
-    N14 -->|reports/tables/final_test_metrics.csv<br/>artifacts/test_evaluation_lock.json| REPORT[Final report + docs/07]
-```
-
-### 3.3 Repository layout (after this plan)
-
-```text
-hotel-booking-cancellation-ml/
-├── data/
-│   ├── hotel_bookings.csv            # raw, immutable, SHA-256 verified
-│   ├── interim/                      # 01 output (git-ignored)
-│   └── processed/{splits,features}/  # 02 / 04 outputs (git-ignored)
-├── notebooks/
-│   ├── 01_data_ingestion_quality_cleaning.ipynb
-│   ├── …                             # 02 – 14, see §4
-│   └── legacy/                       # superseded notebooks, read-only
-├── artifacts/                        # JSON contracts, model outputs (tracked); *.joblib ignored
-├── models/                           # fitted pipelines (*.joblib, git-ignored)
-├── reports/{figures,tables}/         # report-ready outputs (tracked)
-├── docs/  ai-usage-disclosure/
-├── DECISIONS.md  PROGRESS.md  plan.md  README.md
-└── requirements.txt  .gitignore
-```
+| # | Sev | Gap | Evidence | Fix and status |
+|---|---|---|---|---|
+| A-01 | High | **AI-use disclosure was incomplete.** Member 2 and 3 logs were empty templates, member 4's log stopped at 2026-09-12, and member 1's log described removed `src/` files. | `ai-usage-disclosure/*.md`, commit `677280f` | **Partly done.** Contribution statement and tools per member added to `ai-usage-disclosure/README.md` and `docs/08` §8.5; Hasitha's Claude Code sessions logged. **Open:** Seneja confirms her 2026-09-16 row; Jayashan adds his Codex rows. |
+| A-02 | High | **Workload was unequal on paper.** Notebooks per owner: Bhanuka 3, Seneja 4, Jayashan 1, Hasitha 6. | `docs/team/roles-and-raci.md` | **Done.** Ownership set in §4.1 and in `docs/team/roles-and-raci.md`, member docs and `docs/PROGRESS.md`. |
+| A-03 | High | **No explicit feature-selection step.** Notebook 03 ranks features (MI, Cramér's V, Spearman) but no rule turns the ranking into keep or drop. No significance tests. MI does not cover the 9 engineered features. Selection today is only by leakage and timing, which is valid but not shown as a method. | Notebook 03 §12, notebook 04 §4.1 | **Done.** Notebook 04 §4.4: Mann-Whitney U / chi-square, BH correction, effect sizes, mutual information on raw and engineered inputs, VIF, decision table and chart. `docs/04` §4.13, decision #31. |
+| A-04 | High | **Perfect collinearity in the linear inputs.** `total_nights = weekend + week nights`, `total_guests = adults + children + babies`, `total_previous_bookings = previous_cancellations + previous_bookings_not_canceled`. All six raw parts and three totals go into Logistic Regression and SVM. L2 keeps the fit stable, but the **odds ratios of these features cannot be read one by one** (for example `previous_cancellations` shows OR 0.96, which looks protective). | `reports/tables/05_logreg_day_zero_odds_ratios.csv` | **Done.** Caveat in notebook 05 §5; reduced input set and L1 penalty in 05 §6 with readable odds ratios. |
+| A-05 | Medium | Notebook 10 has no chart (every other notebook has at least one). | Notebook outline | **Done.** Check-matrix heatmap in notebook 10 §5.2. |
+| A-06 | Medium | Notebook 11 §11 and notebook 13 §7 still say "fill in after running". | Notebooks 11, 13 | **Done.** Notebook 11 §11 and 13 §7 filled with the recorded numbers. |
+| A-07 | Medium | Figure fixes. `11_cv_pr_auc_comparison`: rows not sorted by score (SVM 0.677 drawn below LR 0.651) and SVM subsample not marked. `12_threshold_analysis`: legend sits on the "No model" line and the `t = 0.35` label touches the axis. `13_fairness_country`: "flag" labels overlap the overall line, and "Honouring guests" is unclear (use "Guests who stayed"). `03_mutual_information`: does not mark which features were later excluded. | `reports/figures/` | **Done.** 03 MI bars coloured by later role; 11 sorted by day-zero score with hollow SVM marker; 12 legend moved and label lifted; 13 labels per panel, away from the overall line, robust vs point flags, "Guests who stayed". |
+| A-09 | Medium | SHAP was skipped because `shap` is not installed in the team kernel. | `docs/DECISIONS.md` #30 | **Done.** `shap` 0.51.0 installed, notebook 13 re-run, decision #33. |
+| A-10 | Medium | Fairness audit flags 8 of 11 country groups. With small groups, many gaps may be noise. | `reports/tables/13_fairness_audit.csv` | **Done.** Notebook 13 §6.2b: bootstrap intervals per group, `13_fairness_audit_ci.csv`, decision #32. |
+| A-11 | Low | `requirements.txt` has `appnope` (macOS only) and an unpinned `shap`. | `requirements.txt` | **Done.** `appnope` removed; `shap==0.51.0` and its new dependencies pinned. |
+| A-12 | Low | Stale text: "proposed decision #23" in the feature spec and feature log, `src/features/` in member 2's AI log, unchecked DoD boxes in `docs/team/*.md` for finished work. | grep | **Done.** Notebook 04 source wording fixed (the saved `feature_spec.json` keeps the old wording until §6 of notebook 04 is re-run, which is not advised); member 2 AI log fixed; DoD boxes ticked for finished work. |
+| A-13 | Low | No one-page problem framing canvas. | Core evidence list | **Done.** Canvas table at the top of `docs/01`. |
+| A-14 | Medium | Final report not assembled. | `docs/PROGRESS.md` | **Open.** Assemble from docs 01 to 08; every number must trace to `reports/tables/`. |
 
 ---
 
-## 4. Notebook catalogue
+## 4. Ownership and remaining work
 
-`model_id` convention: `<model_key>__<variant>`, e.g. `xgboost__day_zero`.
-Variants: `baseline`, `day_zero`, `full_lifecycle`.
+### 4.1 Notebook ownership
 
-| # | Notebook | Owner | Purpose | Key inputs | Key outputs |
-|---|---|---|---|---|---|
-| 01 | `01_data_ingestion_quality_cleaning` | Bhanuka | SHA-256 check, schema contract, data-quality profile, leakage proof, doc reconciliation, rule-based cleaning | raw CSV | `data/interim/hotel_bookings_clean.csv`, `artifacts/data_contract.json`, `reports/tables/01_*` |
-| 02 | `02_train_dev_test_split` | Seneja (validated by Hasitha) | Stratified 70/15/15 split with integrity checks | clean CSV | `data/processed/splits/{train,dev,test}.csv`, `artifacts/split_manifest.json` |
-| 03 | `03_exploratory_data_analysis` | Bhanuka | Target-relationship EDA on **Train only**, Wilson CIs, mutual information, Cramér's V, leakage-suspect checks, EDA insight log | train split | `reports/figures/03_*`, `reports/tables/eda_insight_log.csv` |
-| 04 | `04_feature_engineering_preprocessing` | Seneja | Stateless feature engineering + unit checks, feature spec (both variants), sklearn-native preprocessor templates, pickle round-trip test, feature log | splits | `data/processed/features/*.csv`, `artifacts/feature_spec.json`, `artifacts/preprocessors/*.joblib`, `reports/tables/feature_log.csv` |
-| 05 | `05_baseline_logistic_regression` | Bhanuka | Dummy baselines (most-frequent, stratified) + Logistic Regression (C × class_weight grid) for both variants, odds-ratio interpretation | features train/dev | `models/logreg__*.joblib`, model outputs |
-| 06 | `06_decision_tree` | Seneja | Depth-limited DT grid search, over-fitting curve, human-readable rules | 〃 | `models/decision_tree__*.joblib` |
-| 07 | `07_random_forest` | Seneja | RF randomized search, impurity vs permutation importance | 〃 | `models/random_forest__*.joblib`, importances |
-| 08 | `08_xgboost_tuning` | Jayashan | XGB randomized search (n_iter 50, 7 params), score distribution, Dev early stopping, learning curve, gain importance, error examples | 〃 | `models/xgboost__*.joblib` |
-| 09 | `09_svm_rbf` | Hasitha | RBF-SVM: search on a stratified subsample (O(n²) cost), full-Train fit with sigmoid calibration | 〃 | `models/svm_rbf__day_zero.joblib` |
-| 10 | `10_validation_gate` | Hasitha | Executable version of the docs/06 §6.3 checklist: 12 checks (G1–G5 global, M1–M7 per model), per-model eligibility | all of the above | `artifacts/validation_gate_report.json` |
-| 11 | `11_model_evaluation_comparison` | Hasitha | Unified metrics, CV mean ± std table, Dev bootstrap CIs, Nadeau–Bengio corrected t-test, PR/ROC curves, day-zero vs full-lifecycle delta, rule-based selection | model outputs + gate | `reports/tables/model_comparison_*.csv`, `artifacts/model_selection.json` |
-| 12 | `12_calibration_threshold_policy` | Hasitha | Cross-fitted calibration on Dev (none/sigmoid/isotonic), reliability + ECE, threshold sweep, explicit cost model, cost-ratio sensitivity, Low/Medium/High tiers, **locked policy** | selection | `artifacts/decision_policy.json`, `models/final_model_calibrated.joblib` |
-| 13 | `13_explainability_error_fairness` | Hasitha | Permutation importance, SHAP (tree/linear), LR odds ratios, local explanations, error analysis by segment, fairness (TPR/FPR gaps by country & market segment), **on Dev** | policy | `reports/figures/13_*`, `reports/tables/error_*`, `fairness_*` |
-| 14 | `14_final_test_evaluation` | Hasitha | One-time Test scoring at the locked threshold, bootstrap CIs, Dev→Test gap, tier outcomes, lock file. Appendix: temporal robustness check | policy + test | `reports/tables/final_test_metrics.csv`, `artifacts/test_evaluation_lock.json` |
-
-**Run order:** strictly numeric. `05–09` are independent of each other and can
-run in any order (or in parallel by different members), but all of them must
-finish before `10`.
-
-**Approximate runtimes** (8-core laptop): 01–04 < 2 min each · 05 ~3 min · 06 ~2 min ·
-07 ~15 min · 08 ~20 min · 09 ~20–40 min · 10–13 ~5 min each · 14 ~3 min.
-Each model notebook has an `N_ITER` / sample-size knob at the top for quick runs.
-
----
-
-## 5. Shared contracts (the "API" between notebooks)
-
-### 5.1 Model card: `artifacts/model_outputs/<model_id>/model_card.json`
-
-Every model notebook writes the same structure. The validation gate and the
-evaluation notebook depend on it:
-
-```json
-{
-  "model_id": "xgboost__day_zero", "model_key": "xgboost", "variant": "day_zero",
-  "owner": "Jayashan Guruge", "notebook": "08_xgboost_tuning.ipynb",
-  "preprocessor_family": "tree", "imbalance_strategy": "scale_pos_weight",
-  "cv": {"type": "StratifiedKFold", "n_splits": 5, "shuffle": true, "random_state": 42, "n_rows": 60996},
-  "n_fit_rows": 60996, "data_files_read": ["…/features/train.csv", "…/features/dev.csv"],
-  "input_hashes": {"train": "…", "dev": "…"}, "best_params": {…},
-  "cv_summary": {"pr_auc": {"mean": …, "std": …}, …}, "dev_quick": {"pr_auc": …},
-  "fit_seconds": …, "library_versions": {…}, "created_at": "…"
-}
-```
-
-Next to it: `cv_fold_scores.csv` (one row per fold, all metrics),
-`dev_predictions.csv` (`booking_id, y_true, y_proba`) and
-`search_results.csv` (full `cv_results_`).
-
-### 5.2 Other contracts
-
-| File | Writer | Content |
+| Member | Notebooks owned | Report sections owned |
 |---|---|---|
-| `data_contract.json` | 01 | raw hash, schema, cleaning log (step → rows affected), clean hash, target rate |
-| `split_manifest.json` | 02 | ratios, seed, sizes, class counts, per-file hashes, `scale_pos_weight` |
-| `feature_spec.json` | 04 | column groups per variant, excluded columns + reason, ADR cap, top-N, feature-file hashes |
-| `validation_gate_report.json` | 10 | global checks, per-model check matrix, eligible model list |
-| `model_selection.json` | 11 | selection policy, ranked candidates, chosen model, rationale |
-| `decision_policy.json` | 12 | model, calibration method, threshold, tiers, cost assumptions, `selected_on: "dev"`, policy hash |
-| `test_evaluation_lock.json` | 14 | timestamp, policy hash, test hash, headline metrics |
+| Bhanuka Samarasinghe | 01 Data quality, 03 EDA, 05 Baselines + LR | Data understanding (docs/03) |
+| Seneja Ramanayake | 02 Split, 04 Features + preprocessing + screening, 06 Decision Tree, 07 Random Forest | Preprocessing and features (docs/04) |
+| Jayashan Guruge | 08 XGBoost, 11 Evaluation + selection | Model strategy and comparison (docs/05, docs/06 §6.4) |
+| Hasitha Erandika | 09 SVM, 10 Validation gate, 12 Calibration + threshold, 13 Explainability + fairness, 14 Final test | Framing, workflow, evaluation, recommendation, reproducibility (docs/01, 02, 06, 07, 08), report assembly |
 
----
+### 4.2 Remaining work by member
 
-## 6. Best practices adopted (industry standard)
-
-### 6.1 Reproducibility
-- `RANDOM_STATE = 42` everywhere (split, CV, every estimator, bootstrap,
-  subsampling) and `np.random.seed` at the top of every notebook.
-- Raw data SHA-256 verified against the documented fingerprint before use.
-- Every artifact hashed. Downstream notebooks refuse to run on a mismatched
-  input (**fail fast**, with a clear message naming the upstream notebook to re-run).
-- Environment cell prints Python, OS and library versions. Model cards store them.
-- Notebooks resolve the project root themselves, so they work from any
-  working directory (VS Code / Jupyter).
-
-### 6.2 Leakage prevention
-- Leakage columns dropped in `01` and **asserted absent** in `02`, `04` and `10`.
-- Dedup before the split, verified in `10` by content hash across splits.
-- All learned preprocessing lives *inside* the `Pipeline`, so CV refits it per fold.
-- Day-zero vs full-lifecycle variants defined **once** in `feature_spec.json`.
-- EDA that looks at the target runs on Train only.
-- Test is read only in `14`, enforced statically and by lock file.
-
-### 6.3 Modelling
-- One shared preprocessing template per (family × variant). No private copies.
-- Stratified 5-fold CV inside Train. Multi-metric scoring. Refit on **PR-AUC**
-  (not accuracy). `return_train_score=True` to diagnose over-fitting.
-- Class imbalance handled with `class_weight` / `scale_pos_weight` (no
-  resampling, so CV stays leakage-safe). LR's grid includes `class_weight=None`
-  to *show* the effect rather than assume it.
-- Search-space sizes justified (grid for small spaces, randomized for large ones).
-- Compute-aware choices are documented (SVM subsample search, XGB early stopping on Dev).
-
-### 6.4 Evaluation
-- Single metric function for every model (`11`). Report CV **mean ± std**, not one point estimate.
-- Uncertainty: bootstrap 95 % CIs on Dev/Test. The **Nadeau–Bengio corrected
-  resampled t-test** for paired CV comparisons, because the naive t-test is over-confident.
-- Model selection is a **written rule** (day-zero preferred → PR-AUC within
-  1 SD → most interpretable), applied in code.
-- Calibration chosen by cross-fitting on Dev, so the same Dev rows don't both fit the calibrator and score it.
-- Threshold from an **explicit, stated cost model**, plus a sensitivity curve over cost ratios.
-- Fairness: TPR/FPR gaps by `country` and `market_segment`, with minimum-support rules and disparity flags.
-
-### 6.5 Notebook hygiene
-- One task per cell, each preceded by a markdown cell explaining *what* and *why*.
-- Header cell on every notebook: owner, purpose, inputs, outputs, rubric criteria, runtime.
-- Configuration at the top. No magic numbers buried in cells.
-- Assertions instead of "eyeball it" prints.
-- Figures saved with a notebook prefix (`reports/figures/08_*.png`). Tables saved as CSV, so report numbers trace to a file.
-- Consistent colour-blind-safe palette (blue = not cancelled, orange = cancelled). No dual axes.
-- Clear outputs before committing large re-runs if the diff gets noisy (optional `nbstripout`, see F-08).
-
-### 6.6 Git hygiene
-- `.gitignore` covers caches, virtual envs, generated data and `*.joblib`.
-- Small JSON/CSV artifacts *are* tracked: they are the evidence behind the report.
-- Feature branches + PR review, as the team already does (DoD requires peer review).
-
----
-
-## 7. Proposed new `DECISIONS.md` entries
-
-These still need to be appended by their owners, following the log's own rules:
-
-| # | Decision | Choice | Evidence | Owner |
-|---|---|---|---|---|
-| 21 | Dedup key | Dedup on modelling columns *after* dropping leakage columns (32,252 rows removed, 87,138 kept) | `01` duplicate table | Bhanuka |
-| 22 | `required_car_parking_spaces` | Exclude from day-zero, keep in full-lifecycle | 0 % cancellation across 7,313 rows (`03`) | Seneja |
-| 23 | `arrival_date_year` | Exclude from features; use the temporal check instead | Drift 20 % → 32 % (`03`) | Seneja |
-| 24 | Architecture | Remove `src/`; notebook-only pipeline with artifact contracts and sklearn-native preprocessing | This plan, I-05 | Team |
-| 25 | Updated baseline | Majority-class baseline is 72.72 % accuracy / PR-AUC 0.273 on deduplicated data (supersedes the 62.96 % in decisions 7, 10) | `01`, `02` | Hasitha |
-| 26 | Label conflicts | Keep the 265 conflicting groups; report them as irreducible noise | `01` | Bhanuka |
-| 27 | Calibration method | Chosen by cross-fitted Brier score on Dev | `12` | Hasitha |
-| 28 | Operating threshold | Cost-optimal on Dev under stated assumptions; tiers Low/Medium/High | `12` | Hasitha |
-
----
-
-## 8. Definition of done (per notebook)
-
-- [ ] Runs top-to-bottom on a fresh kernel ("Restart & Run All") with no manual steps.
-- [ ] Every input hash check passes. No warnings that indicate bugs (convergence, dtype).
-- [ ] All declared outputs written. Figures/tables referenced in the report exist on disk.
-- [ ] Every non-trivial choice has a `DECISIONS.md` row. `PROGRESS.md` updated.
-- [ ] AI usage logged in `ai-usage-disclosure/<member>.md`.
-- [ ] Peer-reviewed by one other member.
-
----
-
-## 9. Documentation updates required (follow-up)
-
-| Doc | Change |
+| Member | Tasks |
 |---|---|
-| `docs/02-workflow-and-architecture.md` | Split is 70/15/15 (not 80/20). Add DT + SVM. Replace `src/` with the notebook/artifact architecture (§3.2). |
-| `docs/03-data-understanding.md` | Add a "post-dedup" column to §3.3/§3.5 (27.28 %, Non Refund 1,017 rows / 94.6 %). Add the parking & country findings. |
-| `docs/04-preprocessing-feature-engineering.md` | §4.6 add `required_car_parking_spaces` to day-zero exclusions. §4.10 true split sizes. §4.11 DoD now points at `04` notebook + `feature_spec.json`. |
-| `docs/05-modeling-strategy.md`, `06-evaluation-plan.md` | Baseline 72.72 % accuracy. PR-AUC baseline = prevalence 0.273. |
-| `docs/08-reproducibility.md` | Notebooks `01..14`, artifact hashing, lock file. |
-| `docs/team/*.md`, `roles-and-raci.md` | Replace `src/...py` deliverables with notebook deliverables (§4). |
-| `PROGRESS.md` | Reset workstream rows to match §4. |
+| Bhanuka | Run notebook 03 and 05 §6 (rules in §6); review the reduced-set odds ratios and add them to docs/03 or docs/05 |
+| Seneja | Run notebook 04 §4.4; review the screening table and any "candidate to drop" rows; confirm the AI-log row |
+| Jayashan | Refresh the notebook 11 chart (rules in §6); add own Codex rows to the AI log; review docs/05 and docs/06 §6.4 |
+| Hasitha | Install `shap` and run notebook 13; refresh the charts in 10 and 12; pin `shap`; assemble the report |
+| Everyone | Review and explain own notebooks; peer-review one other member's notebook; sign off the final report |
 
 ---
 
-## 10. Future implementation (roadmap)
+## 5. Feature selection: method
 
-| ID | Item | Why | Priority |
+Goal: show a clear, repeatable method for which inputs are kept, **without changing the
+modelling spec** unless the evidence says so. The spec is already justified by leakage and
+timing, and changing it would force a re-run of notebooks 05 to 14, which the test-once
+lock forbids for notebook 14.
+
+**Notebook 04, new §4.4 "Statistical feature screening (Train only)"**
+
+1. **Relevance tests** on every candidate input, including engineered ones:
+   - Numeric: Mann-Whitney U test (no normality assumption) with rank-biserial effect size.
+   - Categorical: chi-square test with bias-corrected Cramér's V.
+   - Benjamini-Hochberg correction across all tests.
+   - With about 61,000 rows almost everything is significant, so the decision uses
+     **effect size**, not the p-value. Weak = |rank-biserial| < 0.05 and V < 0.05.
+2. **Mutual information** on the full candidate list (raw and engineered).
+3. **Redundancy:** VIF on the linear numeric block and an exact-identity check
+   (the three sums in A-04). Flag VIF > 10.
+4. **Decision table** (`reports/tables/04_feature_screening.csv`): feature, test, p (adjusted),
+   effect size, MI, VIF, decision (keep / keep for trees only / exclude), reason.
+5. **Charts:** effect size vs MI scatter coloured by decision, and a VIF bar chart.
+
+**Notebook 05, new §6 "Sensitivity checks"**
+
+- Reduced linear set (drop the raw parts of the three sums): CV PR-AUC compared with
+  the full set. If within 1 SD, the odds ratios from the reduced model are the ones to
+  quote. Logged as decision #31.
+- L1-penalised LR (`saga`) to show which inputs shrink to zero (embedded selection).
+
+Tree models keep the full set: redundant inputs do not hurt their accuracy, and
+permutation importance (07, 13) already shows which inputs they rely on.
+
+---
+
+## 6. How to run the new cells (and keep the Test lock valid)
+
+Notebook 14 checks that the policy, the final model and the gate report are exactly what
+it locked. Some cells rewrite those files. `models/*.joblib` is git-ignored, so a
+rewritten model **cannot be restored from git**. Run only what this table says.
+
+| Notebook | Run | Do not run | Why |
 |---|---|---|---|
-| F-01 | Re-introduce a small, tested `hotel_ml/` package *once the notebooks stabilise* (feature function, metrics, loaders) with `pytest`. | The notebook-only design deliberately duplicates ~40 lines of helpers across model notebooks. A package removes that once the API is stable. | Medium |
-| F-02 | Experiment tracking with MLflow (params, metrics, artifacts per run). | Replaces hand-written model cards with a queryable run history. | Medium |
-| F-03 | `country` ablation + check against a check-in-time nationality hypothesis. | I-15, confirm or rule out a second leakage source. | High |
-| F-04 | Grouped / time-aware CV (e.g. `TimeSeriesSplit` on arrival date) as a secondary validation scheme. | Random CV is optimistic under drift (I-08). | Medium |
-| F-05 | Hotel-specific thresholds (City vs Resort). | Base rates differ (doc 03 §3.3). | Low |
-| F-06 | Target/frequency encoding inside CV folds for `country`/`agent` as an alternative to top-N one-hot. | May help linear models and SVM. | Low |
-| F-07 | Pipeline orchestration: `papermill` to run `01→14` headless, plus CI that executes notebooks on a 5 % sample. | Proves "runs top-to-bottom" automatically. | Medium |
-| F-08 | `pre-commit` with `nbstripout`, `ruff` (via `nbqa`), and `detect-secrets`. | Clean diffs and consistent style. | Low |
-| F-09 | Model monitoring design: PSI/data-drift checks on new bookings, calibration-drift alerts, retraining cadence. | The model is trained on 2015–17 data (doc 07 limitation). | Low (report only) |
-| F-10 | Model card in Markdown (Mitchell et al., 2019) generated from `decision_policy.json` + test metrics. | Responsible-AI rubric item. | Medium |
-| F-11 | Pin the exact environment from the Python 3.11 kernel (`pip freeze > requirements.lock`) and drop OS-specific packages (`appnope`). | Requirements were frozen on another machine/Python. | High |
+| 03 | Everything | | Writes report figures and tables only |
+| 04 | Sections 1 to 4 (includes the new §4.4) | Section 6 | §6 rewrites the feature files, templates and feature spec |
+| 05 | Sections 1 and 2, then the new §6 | Sections 3, 4 and 5 | §3 and §4 rewrite the saved models and model cards; §5 needs §4 |
+| 10 | Sections 1 to 5 (includes the new chart) | Section 6 | §6 rewrites the gate report |
+| 11 | Sections 1 to 9 | Section 10 | §10 rewrites `model_selection.json` |
+| 12 | Sections 1 to 5 | Section 6 | §6 rewrites the policy and `final_model_calibrated.joblib` |
+| 13 | Everything (after `pip install shap`) | | Writes report figures and tables only |
+| 14 | Nothing | Everything | Test is scored once; the lock is already written |
+
+After running, `git status artifacts/` should show no changes. If it does, restore them
+with `git checkout -- artifacts/` before committing.
+
+**Phases**
+
+| Phase | Work | Status |
+|---|---|---|
+| 1. Integrity | A-01, A-02, A-12 | Done, except the members' own AI-log rows |
+| 2. Evidence | A-03, A-04, A-09, A-10 | Done |
+| 3. Polish | A-05, A-06, A-07, A-11, A-13 | Done |
+| 4. Report | A-14 | Open |
+
+---
+
+## 7. Future work (not for this submission)
+
+Carried from the old roadmap: shared tested package (F-01), MLflow tracking (F-02),
+`country` ablation (F-03, partly covered by A-10), time-aware CV (F-04), per-hotel
+thresholds (F-05), target encoding in CV (F-06), `papermill` + CI run (F-07),
+`pre-commit` with `nbstripout` (F-08), drift monitoring design (F-09), Markdown model
+card (F-10).
