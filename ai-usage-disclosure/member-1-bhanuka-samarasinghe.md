@@ -1,6 +1,6 @@
 # AI Usage Log: Bhanuka Samarasinghe (Member 1)
 
-Role: Data Engineering + EDA Lead. Owns notebooks 01, 03, 05 and 13. See
+Role: Data Engineering + EDA Lead. Owns notebooks 01, 03 and 05. See
 [`../docs/team/member-1-bhanuka-samarasinghe.md`](../docs/team/member-1-bhanuka-samarasinghe.md).
 
 ## Tool used

@@ -10,7 +10,7 @@ Samarasinghe (Member 1). Every decision below must also have a row in
 |---|---|
 | `notebooks/01_data_ingestion_quality_cleaning.ipynb` | Fixed-rule cleaning (§4.2–§4.4), safe before the split |
 | `notebooks/02_train_dev_test_split.ipynb` | 70 / 15 / 15 stratified split (§4.10) |
-| `notebooks/04_feature_engineering_preprocessing.ipynb` | Stateless feature engineering (§4.5), feature spec and variants (§4.6), learned preprocessing templates (§4.7–§4.8), Feature Log (§4.12) |
+| `notebooks/04_feature_engineering_preprocessing.ipynb` | Stateless feature engineering (§4.5), feature spec and variants (§4.6), learned preprocessing templates (§4.7–§4.8), Feature Log (§4.12), statistical feature screening (§4.13) |
 
 ## 4.1 Non-tabular features
 
@@ -250,3 +250,39 @@ The authoritative Feature Log is **generated from the code** by notebook 04
 | Post-booking numeric | booking_changes, days_in_waiting_list, required_car_parking_spaces, room_type_changed | median impute + standardise | median impute | ✗ | ✓ |
 | Post-booking categorical | assigned_room_type | one-hot | one-hot | ✗ | ✓ |
 | Excluded | booking_id, is_canceled, arrival_date_year, arrival_date_month, reservation_status, reservation_status_date | - | - | ✗ | ✗ |
+
+## 4.13 Feature selection: statistical screening
+
+Features were selected in two steps.
+
+1. **Timing and leakage rules (decide the spec).** Leakage columns are removed
+   (decisions #3, #20), post-booking fields go to the full-lifecycle variant only
+   (#6, #12, #22), and `arrival_date_year` is excluded because of drift (#23).
+2. **Statistical screening (evidence for the spec).** Notebook 04 §4.4 tests every
+   candidate input on Train only:
+   - numeric inputs: Mann-Whitney U test with rank-biserial effect size;
+   - categorical inputs: chi-square test with bias-corrected Cramér's V;
+   - Benjamini-Hochberg correction across all tests;
+   - mutual information on raw and engineered inputs;
+   - variance inflation factor (VIF) and exact-sum checks on the linear inputs.
+
+   With about 61,000 rows nearly every test is significant, so decisions use the
+   effect size (weak = below 0.05). Results: `reports/tables/04_feature_screening.csv`
+   and `reports/figures/04_feature_screening.png`.
+
+**Redundancy found.** `total_nights`, `total_guests` and `total_previous_bookings` are
+exact sums of other inputs (infinite VIF). Tree models are not affected. For Logistic
+Regression the odds ratios of these columns cannot be read one by one, so notebook 05
+§6 refits it without the raw parts and with an L1 penalty
+(`reports/tables/05_sensitivity_checks.csv`). The spec itself is unchanged: changing it
+would change the feature files behind the locked Test result (decision #31).
+
+**Results.** 36 of 38 candidates are significant after correction. The two that are
+not, `arrival_date_week_number` and `arrival_date_day_of_month`, are calendar fields
+with a seasonal pattern that a shift test cannot see; XGBoost uses both (permutation
+importance ranks 10 and 11), so they are kept. Logistic Regression without the raw
+parts of the sums scores the same CV PR-AUC (0.6506 vs 0.6507), and with an L1 penalty
+0.6501 (33 encoded inputs set to zero), so the reduced model's odds ratios
+(`reports/tables/05_logreg_reduced_odds_ratios.csv`) are the ones to quote: for example
+`prior_cancellation_rate` OR 1.76 per SD and `total_of_special_requests` OR 0.54 per SD.
+

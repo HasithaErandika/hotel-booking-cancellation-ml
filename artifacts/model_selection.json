@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-10-11T16:05:58+00:00",
+  "created_at": "2026-10-12T03:14:28+00:00",
   "notebook": "11_model_evaluation_comparison.ipynb",
   "policy": {
     "preferred_variant": "day_zero",
@@ -28,5 +28,5 @@
   ],
   "baseline_cv_pr_auc": 0.2734578719154206,
   "rationale": "xgboost__day_zero is the most interpretable day_zero model within 0.0050 CV PR-AUC of the best (xgboost__day_zero).",
-  "gate_report_created_at": "2026-10-11T16:01:27+00:00"
+  "gate_report_created_at": "2026-10-12T03:11:49+00:00"
 }

@@ -1,5 +1,4 @@
 anyio==4.15.1
-appnope==1.0.0
 argon2-cffi-bindings==26.1.0
 argon2-cffi==25.1.0
 arrow==1.4.0
@@ -54,6 +53,7 @@ jupyterlab_server==2.28.0
 jupyterlab_widgets==3.0.17
 kiwisolver==1.5.1
 lark==1.3.1
+llvmlite==0.50.0
 MarkupSafe==3.0.3
 matplotlib-inline==0.2.2
 matplotlib==3.11.2
@@ -65,6 +65,7 @@ nbformat==5.11.1
 nest-asyncio2==1.7.2
 notebook==7.6.2
 notebook_shim==0.2.4
+numba==0.68.0
 numpy==2.5.3
 packaging==26.3
 pandas==3.0.5
@@ -95,15 +96,17 @@ scikit-learn==1.9.1
 scipy==1.18.1
 seaborn==0.13.2
 Send2Trash==2.1.0
-shap>=0.46  # explainability (notebook 13); pin after `pip freeze` on the team kernel
+shap==0.51.0  # explainability (notebook 13)
 six==1.17.0
 sklearn-compat==0.1.6
+slicer==0.0.8
 soupsieve==2.9.2
 stack-data==0.6.3
 terminado==0.18.1
 threadpoolctl==3.6.0
 tinycss2==1.5.1
 tornado==6.5.8
+tqdm==4.70.1
 traitlets==5.16.1
 typing_extensions==4.16.0
 tzdata==2026.4

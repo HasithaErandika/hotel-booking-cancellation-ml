@@ -1,6 +1,6 @@
 # AI Usage Log: Hasitha Erandika (Member 4)
 
-Role: Validation, Evaluation & Decision Science Lead. Owns notebooks 09, 10 and 14,
+Role: Validation, Evaluation & Decision Science Lead. Owns notebooks 09, 10, 12, 13 and 14,
 docs 01, 02, 07 and 08, and report assembly. See
 [`../docs/team/member-4-hasitha-erandika.md`](../docs/team/member-4-hasitha-erandika.md).
 

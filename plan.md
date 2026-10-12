@@ -3,6 +3,8 @@
 > Status: **active** · Last revised: 2026-10-12 · Replaces the 2026-10-11 plan
 > (notebook-only pipeline), which is finished. The old plan is kept in git history
 > at commit `02cc61a`.
+>
+> **Code fixes done and run on 2026-10-12** (see the Status in §3). The Test lock still verifies.
 
 This plan has five parts: (1) what the old plan delivered, (2) how the project scores
 against the marking rubric today, (3) the gaps found in this audit, (4) a fair split of
@@ -35,7 +37,7 @@ has a gap a marker will notice · **Weak** = likely to lose marks.
 | Business problem framing | 5 | `docs/01`: stakeholder, decision need, primary and secondary lens, unit of analysis, exact output, rationale, success criteria | Strong | No one-page **problem framing canvas** (listed as core evidence). A-13 |
 | Workflow diagram and decision log | 10 | Mermaid diagrams in `docs/02` and README, 30 decisions with options, reasons and evidence | Strong | None |
 | Data understanding, EDA, data quality | 10 | `docs/03` data dictionary, notebook 01 quality audit, notebook 03 (19 figures, Wilson CIs, MI, Cramér's V, Spearman), EDA insight log | Strong | Minor figure fixes. A-07 |
-| Preprocessing and feature engineering | 15 | Notebook 04, feature spec, feature log, leakage variants, imbalance, ADR cap, unseen-category test | Partial | No explicit **feature selection** step and perfect collinearity in the linear inputs. SMOTE promised but not run. A-03, A-04, A-08 |
+| Preprocessing and feature engineering | 15 | Notebook 04, feature spec, feature log, leakage variants, imbalance, ADR cap, unseen-category test | Partial | No explicit **feature selection** step and perfect collinearity in the linear inputs. A-03, A-04 |
 | Model strategy and comparison | 20 | Two dummies + LR, DT, RF, XGBoost, SVM, both variants, written selection rule | Strong | SVM compared on a 12,000-row CV subsample; must be stated next to the chart. A-07 |
 | Evaluation, validation, critical judgement | 20 | Validation gate (83 checks), CV mean ± SD, bootstrap CIs, corrected t-test, calibration, cost-based threshold, error and fairness audit, test-once lock, temporal check | Strong | "Fill in after running" cells in 11 and 13 still empty. SHAP not run. Fairness flags need CIs. A-06, A-09, A-10 |
 | Recommendation, limitations, stakeholder value | 10 | `docs/07` filled with real numbers | Strong | Final report not assembled. A-14 |
@@ -52,49 +54,44 @@ criterion.
 
 Severity: **High** = costs marks or integrity · **Medium** = a marker may notice · **Low** = hygiene.
 
-| # | Sev | Gap | Evidence | Fix |
+| # | Sev | Gap | Evidence | Fix and status |
 |---|---|---|---|---|
-| A-01 | High | **AI-use disclosure was incomplete.** Member 2 and 3 logs were empty templates, member 4's log stopped at 2026-09-12, and member 1's log described removed `src/` files. | `ai-usage-disclosure/*.md`, commit `677280f` | **Partly done 2026-10-12:** equal-contribution statement and tools (Bhanuka and Seneja: Antigravity, Jayashan: Codex, Hasitha: Claude Code) added to the disclosure README and `docs/08` section 8.5; Hasitha's Claude Code sessions logged. **Still open:** Seneja confirms the prompt for her 2026-09-16 row; Jayashan adds his Codex session rows. |
-| A-02 | High | **Workload was unequal on paper.** Notebooks per owner: Bhanuka 3, Seneja 4, Jayashan 1, Hasitha 6. | `docs/team/roles-and-raci.md` | Team states equal contribution (disclosure README). Rebalance ownership (section 4) and update the RACI and team docs to match. |
-| A-03 | High | **No explicit feature-selection step.** Notebook 03 ranks features (MI, Cramér's V, Spearman) but no rule turns the ranking into keep or drop. No significance tests. MI does not cover the 9 engineered features. Selection today is only by leakage and timing, which is valid but not shown as a method. | Notebook 03 §12, notebook 04 §4.1 | Add a statistical screening section to notebook 04 (§5 below). |
-| A-04 | High | **Perfect collinearity in the linear inputs.** `total_nights = weekend + week nights`, `total_guests = adults + children + babies`, `total_previous_bookings = previous_cancellations + previous_bookings_not_canceled`. All six raw parts and three totals go into Logistic Regression and SVM. L2 keeps the fit stable, but the **odds ratios of these features cannot be read one by one** (for example `previous_cancellations` shows OR 0.96, which looks protective). | `reports/tables/05_logreg_day_zero_odds_ratios.csv` | VIF check in 04. Caveat in notebook 05 §5. Reduced-set LR as a sensitivity check (§5). |
-| A-05 | Medium | Notebook 10 has no chart (every other notebook has at least one). | Notebook outline | Add a heatmap of the per-model check matrix (PASS / WARN / FAIL). |
-| A-06 | Medium | Notebook 11 §11 and notebook 13 §7 still say "fill in after running". | Notebooks 11, 13 | Fill with the real numbers (already in `docs/06` and `docs/07`). |
-| A-07 | Medium | Figure fixes. `11_cv_pr_auc_comparison`: rows not sorted by score (SVM 0.677 drawn below LR 0.651) and SVM subsample not marked. `12_threshold_analysis`: legend sits on the "No model" line and the `t = 0.35` label touches the axis. `13_fairness_country`: "flag" labels overlap the overall line, and "Honouring guests" is unclear (use "Guests who stayed"). `03_mutual_information`: does not mark which features were later excluded. | `reports/figures/` | Fix in the notebooks and re-save. See §6 for which notebooks are safe to re-run. |
-| A-08 | Medium | Decision #7 says SMOTE is "kept as a documented comparison", but SMOTE was never run. | `docs/DECISIONS.md` #7, grep of notebooks | Either run SMOTE inside CV in notebook 05 (`imblearn` Pipeline, LR day-zero only) or add decision #31 that amends #7. Running it is better evidence. |
-| A-09 | Medium | SHAP was skipped because `shap` is not installed in the team kernel. | `docs/DECISIONS.md` #30 | `pip install shap`, re-run notebook 13 (Dev only, Test stays locked). |
-| A-10 | Medium | Fairness audit flags 8 of 11 country groups. With small groups, many gaps may be noise. | `reports/tables/13_fairness_audit.csv` | Add bootstrap CIs on group TPR and FPR. Flag only when the CI excludes the overall rate. Keep the original table for transparency. |
-| A-11 | Low | `requirements.txt` has `appnope` (macOS only) and an unpinned `shap`. | `requirements.txt` | Pin from the Python 3.11 team kernel (`pip freeze`), drop `appnope`. Old F-11. |
-| A-12 | Low | Stale text: "proposed decision #23" in the feature spec and feature log, `src/features/` in member 2's AI log, unchecked DoD boxes in `docs/team/*.md` for finished work. | grep | Small text fixes. |
-| A-13 | Low | No one-page problem framing canvas. | Core evidence list | Add a canvas table at the top of `docs/01`. |
-| A-14 | Medium | Final report not assembled. | `docs/PROGRESS.md` | Assemble from docs 01 to 08; every number must trace to `reports/tables/`. |
+| A-01 | High | **AI-use disclosure was incomplete.** Member 2 and 3 logs were empty templates, member 4's log stopped at 2026-09-12, and member 1's log described removed `src/` files. | `ai-usage-disclosure/*.md`, commit `677280f` | **Partly done.** Contribution statement and tools per member added to `ai-usage-disclosure/README.md` and `docs/08` §8.5; Hasitha's Claude Code sessions logged. **Open:** Seneja confirms her 2026-09-16 row; Jayashan adds his Codex rows. |
+| A-02 | High | **Workload was unequal on paper.** Notebooks per owner: Bhanuka 3, Seneja 4, Jayashan 1, Hasitha 6. | `docs/team/roles-and-raci.md` | **Done.** Ownership set in §4.1 and in `docs/team/roles-and-raci.md`, member docs and `docs/PROGRESS.md`. |
+| A-03 | High | **No explicit feature-selection step.** Notebook 03 ranks features (MI, Cramér's V, Spearman) but no rule turns the ranking into keep or drop. No significance tests. MI does not cover the 9 engineered features. Selection today is only by leakage and timing, which is valid but not shown as a method. | Notebook 03 §12, notebook 04 §4.1 | **Done.** Notebook 04 §4.4: Mann-Whitney U / chi-square, BH correction, effect sizes, mutual information on raw and engineered inputs, VIF, decision table and chart. `docs/04` §4.13, decision #31. |
+| A-04 | High | **Perfect collinearity in the linear inputs.** `total_nights = weekend + week nights`, `total_guests = adults + children + babies`, `total_previous_bookings = previous_cancellations + previous_bookings_not_canceled`. All six raw parts and three totals go into Logistic Regression and SVM. L2 keeps the fit stable, but the **odds ratios of these features cannot be read one by one** (for example `previous_cancellations` shows OR 0.96, which looks protective). | `reports/tables/05_logreg_day_zero_odds_ratios.csv` | **Done.** Caveat in notebook 05 §5; reduced input set and L1 penalty in 05 §6 with readable odds ratios. |
+| A-05 | Medium | Notebook 10 has no chart (every other notebook has at least one). | Notebook outline | **Done.** Check-matrix heatmap in notebook 10 §5.2. |
+| A-06 | Medium | Notebook 11 §11 and notebook 13 §7 still say "fill in after running". | Notebooks 11, 13 | **Done.** Notebook 11 §11 and 13 §7 filled with the recorded numbers. |
+| A-07 | Medium | Figure fixes. `11_cv_pr_auc_comparison`: rows not sorted by score (SVM 0.677 drawn below LR 0.651) and SVM subsample not marked. `12_threshold_analysis`: legend sits on the "No model" line and the `t = 0.35` label touches the axis. `13_fairness_country`: "flag" labels overlap the overall line, and "Honouring guests" is unclear (use "Guests who stayed"). `03_mutual_information`: does not mark which features were later excluded. | `reports/figures/` | **Done.** 03 MI bars coloured by later role; 11 sorted by day-zero score with hollow SVM marker; 12 legend moved and label lifted; 13 labels per panel, away from the overall line, robust vs point flags, "Guests who stayed". |
+| A-09 | Medium | SHAP was skipped because `shap` is not installed in the team kernel. | `docs/DECISIONS.md` #30 | **Done.** `shap` 0.51.0 installed, notebook 13 re-run, decision #33. |
+| A-10 | Medium | Fairness audit flags 8 of 11 country groups. With small groups, many gaps may be noise. | `reports/tables/13_fairness_audit.csv` | **Done.** Notebook 13 §6.2b: bootstrap intervals per group, `13_fairness_audit_ci.csv`, decision #32. |
+| A-11 | Low | `requirements.txt` has `appnope` (macOS only) and an unpinned `shap`. | `requirements.txt` | **Done.** `appnope` removed; `shap==0.51.0` and its new dependencies pinned. |
+| A-12 | Low | Stale text: "proposed decision #23" in the feature spec and feature log, `src/features/` in member 2's AI log, unchecked DoD boxes in `docs/team/*.md` for finished work. | grep | **Done.** Notebook 04 source wording fixed (the saved `feature_spec.json` keeps the old wording until §6 of notebook 04 is re-run, which is not advised); member 2 AI log fixed; DoD boxes ticked for finished work. |
+| A-13 | Low | No one-page problem framing canvas. | Core evidence list | **Done.** Canvas table at the top of `docs/01`. |
+| A-14 | Medium | Final report not assembled. | `docs/PROGRESS.md` | **Open.** Assemble from docs 01 to 08; every number must trace to `reports/tables/`. |
 
 ---
 
-## 4. Fair split of ownership and remaining work
+## 4. Ownership and remaining work
 
-### 4.1 Notebook ownership (rebalanced)
+### 4.1 Notebook ownership
 
-| Member | Notebooks owned | Report sections owned | Count |
-|---|---|---|---|
-| Bhanuka Samarasinghe | 01 Data quality, 03 EDA, 05 Baselines + LR, 13 Explainability + fairness | Data understanding (docs/03) | 4 |
-| Seneja Ramanayake | 02 Split, 04 Features + preprocessing, 06 Decision Tree, 07 Random Forest | Preprocessing and features (docs/04) | 4 |
-| Jayashan Guruge | 08 XGBoost, 11 Evaluation + selection, 12 Calibration + threshold | Model strategy and evaluation (docs/05, docs/06) | 3 + 2 docs |
-| Hasitha Erandika | 09 SVM, 10 Validation gate, 14 Final test | Framing, workflow, recommendation, reproducibility (docs/01, 02, 07, 08), report assembly | 3 + 4 docs |
-
-Why this split: notebook 13 depends on Bhanuka's country and LR work, notebooks 11 and
-12 build on Jayashan's CV and tuning work, and the validation gate and final test stay
-with the validation lead. Each member now owns one model and at least one shared stage.
+| Member | Notebooks owned | Report sections owned |
+|---|---|---|
+| Bhanuka Samarasinghe | 01 Data quality, 03 EDA, 05 Baselines + LR | Data understanding (docs/03) |
+| Seneja Ramanayake | 02 Split, 04 Features + preprocessing + screening, 06 Decision Tree, 07 Random Forest | Preprocessing and features (docs/04) |
+| Jayashan Guruge | 08 XGBoost, 11 Evaluation + selection | Model strategy and comparison (docs/05, docs/06 §6.4) |
+| Hasitha Erandika | 09 SVM, 10 Validation gate, 12 Calibration + threshold, 13 Explainability + fairness, 14 Final test | Framing, workflow, evaluation, recommendation, reproducibility (docs/01, 02, 06, 07, 08), report assembly |
 
 ### 4.2 Remaining work by member
 
 | Member | Tasks |
 |---|---|
-| Bhanuka | A-04 caveat + reduced-set LR in 05 · A-08 SMOTE check in 05 · A-09 SHAP in 13 · A-10 fairness CIs in 13 · A-06 fill 13 §7 · A-07 MI chart and fairness chart fixes |
-| Seneja | A-03 statistical feature screening in 04 (§5) · VIF check · update docs/04 §4.5 and feature log · A-12 feature-spec wording |
-| Jayashan | A-06 fill 11 §11 · A-07 sort and mark the CV chart (11), fix threshold chart (12) · review docs/05 and docs/06 against the tables |
-| Hasitha | A-05 chart in 10 · A-13 framing canvas · A-11 requirements · A-12 team DoD boxes · A-01 own AI log + docs/08 §8.5 · A-14 report assembly · update RACI, team docs and PROGRESS for §4.1 |
-| Everyone | Review and explain own notebooks · fill own AI-use log honestly (A-01) · peer-review one other member's notebook · sign off the final report |
+| Bhanuka | Run notebook 03 and 05 §6 (rules in §6); review the reduced-set odds ratios and add them to docs/03 or docs/05 |
+| Seneja | Run notebook 04 §4.4; review the screening table and any "candidate to drop" rows; confirm the AI-log row |
+| Jayashan | Refresh the notebook 11 chart (rules in §6); add own Codex rows to the AI log; review docs/05 and docs/06 §6.4 |
+| Hasitha | Install `shap` and run notebook 13; refresh the charts in 10 and 12; pin `shap`; assemble the report |
+| Everyone | Review and explain own notebooks; peer-review one other member's notebook; sign off the final report |
 
 ---
 
@@ -120,41 +117,46 @@ lock forbids for notebook 14.
    effect size, MI, VIF, decision (keep / keep for trees only / exclude), reason.
 5. **Charts:** effect size vs MI scatter coloured by decision, and a VIF bar chart.
 
-**Notebook 05, new §5.3 "Sensitivity checks"**
+**Notebook 05, new §6 "Sensitivity checks"**
 
 - Reduced linear set (drop the raw parts of the three sums): CV PR-AUC compared with
   the full set. If within 1 SD, the odds ratios from the reduced model are the ones to
   quote. Logged as decision #31.
 - L1-penalised LR (`saga`) to show which inputs shrink to zero (embedded selection).
-- SMOTE inside CV, for decision #7.
 
 Tree models keep the full set: redundant inputs do not hurt their accuracy, and
 permutation importance (07, 13) already shows which inputs they rely on.
 
 ---
 
-## 6. Order of work and re-run rules
+## 6. How to run the new cells (and keep the Test lock valid)
 
-**Re-run rule.** Notebook 14 checks that the policy, the final model and the gate report
-match what it locked. Re-running 10, 11 or 12 rewrites those files (new timestamps, new
-hashes), so 14 would refuse to run. That is by design. Therefore:
+Notebook 14 checks that the policy, the final model and the gate report are exactly what
+it locked. Some cells rewrite those files. `models/*.joblib` is git-ignored, so a
+rewritten model **cannot be restored from git**. Run only what this table says.
 
-- Safe to re-run: 01 to 09 only if their outputs do not change the feature files or
-  model files used downstream. 03, 04 (new sections only), 05 (new sections), 13 are safe.
-- For 10, 11, 12: edit only the chart and text cells, and re-run them on a scratch branch
-  to save the figures. Then restore `artifacts/` with `git checkout -- artifacts/` before
-  committing, so the locked hashes stay valid. Notebook 10 may need the same treatment.
-- Never re-run 14 against Test. If a change truly needs a new Test score, record it as a
-  new decision and say so in the report.
+| Notebook | Run | Do not run | Why |
+|---|---|---|---|
+| 03 | Everything | | Writes report figures and tables only |
+| 04 | Sections 1 to 4 (includes the new §4.4) | Section 6 | §6 rewrites the feature files, templates and feature spec |
+| 05 | Sections 1 and 2, then the new §6 | Sections 3, 4 and 5 | §3 and §4 rewrite the saved models and model cards; §5 needs §4 |
+| 10 | Sections 1 to 5 (includes the new chart) | Section 6 | §6 rewrites the gate report |
+| 11 | Sections 1 to 9 | Section 10 | §10 rewrites `model_selection.json` |
+| 12 | Sections 1 to 5 | Section 6 | §6 rewrites the policy and `final_model_calibrated.joblib` |
+| 13 | Everything (after `pip install shap`) | | Writes report figures and tables only |
+| 14 | Nothing | Everything | Test is scored once; the lock is already written |
+
+After running, `git status artifacts/` should show no changes. If it does, restore them
+with `git checkout -- artifacts/` before committing.
 
 **Phases**
 
-| Phase | Work | Done when |
+| Phase | Work | Status |
 |---|---|---|
-| 1. Integrity | A-01, A-02, A-12: AI logs, ownership docs, stale text | Every member log has real rows or an explicit "no AI used" line |
-| 2. Evidence | A-03, A-04, A-08, A-09, A-10 | New tables and figures saved; decisions #31 and up logged |
-| 3. Polish | A-05, A-06, A-07, A-11, A-13 | Every notebook has a chart, no "fill in" cells, figures re-saved |
-| 4. Report | A-14 | Report numbers match `reports/tables/`; peer review signed |
+| 1. Integrity | A-01, A-02, A-12 | Done, except the members' own AI-log rows |
+| 2. Evidence | A-03, A-04, A-09, A-10 | Done |
+| 3. Polish | A-05, A-06, A-07, A-11, A-13 | Done |
+| 4. Report | A-14 | Open |
 
 ---
 

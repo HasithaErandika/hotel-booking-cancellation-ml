@@ -33,6 +33,8 @@ Clean dataset (from Bhanuka)
    tree with readable rules.
 5. `notebooks/07_random_forest.ipynb`: tuned Random Forest plus impurity and
    permutation importance, used in notebook 13.
+6. Statistical feature screening in notebook 04 §4.4 (tests, effect sizes, mutual
+   information, VIF) and `docs/04` §4.13.
 
 ## Interfaces
 
@@ -47,11 +49,11 @@ Clean dataset (from Bhanuka)
 
 ## Definition of Done
 
-- [ ] `fit()` is called on the Train split only. Notebook 04 §5.3 checks it, and the
+- [x] `fit()` is called on the Train split only. Notebook 04 §5.3 checks it, and the
       validation gate (notebook 10, check M3) checks it again.
-- [ ] Feature Log matches the actual pipeline code exactly.
-- [ ] Both leakage-timing variants (day-zero / full-lifecycle) produce separate,
+- [x] Feature Log matches the actual pipeline code exactly.
+- [x] Both leakage-timing variants (day-zero / full-lifecycle) produce separate,
       clearly labelled outputs.
-- [ ] Decision Tree and Random Forest logged into the shared evaluation table.
+- [x] Decision Tree and Random Forest logged into the shared evaluation table.
 - [ ] AI tool usage logged in
       `../../ai-usage-disclosure/member-2-seneja-ramanayake.md`.

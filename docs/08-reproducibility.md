@@ -82,7 +82,7 @@
 
 ## 8.5 AI-use transparency
 
-All four members contributed equally to this project. Full per-member logs are kept in
+Full per-member logs and a short contribution statement are kept in
 [`../ai-usage-disclosure/`](../ai-usage-disclosure/).
 
 | Member | AI tool |

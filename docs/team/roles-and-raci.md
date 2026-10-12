@@ -15,10 +15,10 @@ private preprocessing step; everyone consumes the same pipeline outputs.
 
 | Member | Role title | Pipeline stage owned | Model owned | Task category | Doc |
 |---|---|---|---|---|---|
-| **Bhanuka Samarasinghe** | Data Engineer / EDA lead | Ingestion, schema validation, data-quality audit, EDA | Logistic Regression | Linear / interpretable | [member-1-bhanuka-samarasinghe.md](member-1-bhanuka-samarasinghe.md) |
-| **Seneja Ramanayake** | Feature / ML Engineer | Feature engineering, preprocessing pipeline | Random Forest (+ Decision Tree) | Ensemble (bagging) / rule-based | [member-2-seneja-ramanayake.md](member-2-seneja-ramanayake.md) |
-| **Jayashan Guruge** | ML Engineer | Advanced modeling, hyperparameter tuning, cross-validation | XGBoost / Gradient Boosting | Ensemble (boosting) | [member-3-jayashan-guruge.md](member-3-jayashan-guruge.md) |
-| **Hasitha Erandika** | Validation, Evaluation & Decision Science Lead | Validation gate, unified evaluation, calibration, explainability, final recommendation | SVM (RBF kernel) + calibration/threshold ownership of the final selected model | Kernel method / validation & decision layer | [member-4-hasitha-erandika.md](member-4-hasitha-erandika.md) |
+| **Bhanuka Samarasinghe** | Data Engineer / EDA lead | Ingestion, schema validation, data-quality audit, EDA, baselines (notebooks 01, 03, 05) | Logistic Regression | Linear / interpretable | [member-1-bhanuka-samarasinghe.md](member-1-bhanuka-samarasinghe.md) |
+| **Seneja Ramanayake** | Feature / ML Engineer | Split, feature engineering, preprocessing pipeline, feature screening (notebooks 02, 04, 06, 07) | Random Forest (+ Decision Tree) | Ensemble (bagging) / rule-based | [member-2-seneja-ramanayake.md](member-2-seneja-ramanayake.md) |
+| **Jayashan Guruge** | ML Engineer | Advanced modeling, hyperparameter tuning, cross-validation, model comparison and selection (notebooks 08, 11) | XGBoost / Gradient Boosting | Ensemble (boosting) | [member-3-jayashan-guruge.md](member-3-jayashan-guruge.md) |
+| **Hasitha Erandika** | Validation, Evaluation & Decision Science Lead | Validation gate, calibration and threshold, explainability and fairness, final test, final recommendation (notebooks 09, 10, 12, 13, 14) | SVM (RBF kernel) + calibration/threshold ownership of the final selected model | Kernel method / validation & decision layer | [member-4-hasitha-erandika.md](member-4-hasitha-erandika.md) |
 
 Dummy Classifier (naive baseline, category 1) is trained by Bhanuka alongside
 Logistic Regression, since both are needed early to establish the comparison
@@ -43,7 +43,7 @@ R = Responsible, A = Accountable, C = Consulted, I = Informed
 | XGBoost model + tuning | I | C | **R/A** | C |
 | SVM model + tuning | I | I | I | **R/A** |
 | Leakage / validation gate | C | C | C | **R/A** |
-| Unified evaluation framework | I | I | I | **R/A** |
+| Unified evaluation framework | I | I | **R/A** | C |
 | Calibration & threshold analysis | I | I | I | **R/A** |
 | Explainability (SHAP / importances) | C | C | C | **R/A** |
 | Final recommendation & limitations | C | C | C | **R/A** |

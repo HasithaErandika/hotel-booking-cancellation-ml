@@ -2,6 +2,24 @@
 
 *Rubric: 5 marks. Foundational Knowledge; Integration | Problem framing; critical thinking*
 
+## Problem framing canvas
+
+| Element | Our answer |
+|---|---|
+| Stakeholder | Revenue / Reservations Manager (City Hotel and Resort Hotel); secondary: front office, hotel management |
+| Decision need | Which new bookings need attention (confirmation call, overbooking allowance, deposit policy) because they are likely to cancel |
+| Primary lens | Predictive: estimate each booking's cancellation probability |
+| Secondary lens | Explanatory: which booking characteristics go with cancellation, in plain terms |
+| Unit of analysis | One booking (one row) |
+| Task | Supervised binary classification, target `is_canceled` |
+| Exact output | Calibrated probability plus a Low / Medium / High risk tier (threshold 0.35, tiers 0.18 / 0.35) |
+| Data | Hotel Booking Demand, 119,390 rows; 87,138 after de-duplication; 27.28% cancelled |
+| Constraints | Only booking-time fields (day-zero variant); no automatic action against a guest; Test scored once |
+| Success measure | Beat the no-skill PR-AUC of 0.273 clearly; useful recall at a stated cost trade-off; honest limits |
+| Result | XGBoost day-zero, Test PR-AUC 0.774, recall 0.778, precision 0.653 |
+
+Each element is explained in the sections below.
+
 ## 1.1 Business context
 
 Hotels accept bookings well in advance of arrival, but a large share of those bookings

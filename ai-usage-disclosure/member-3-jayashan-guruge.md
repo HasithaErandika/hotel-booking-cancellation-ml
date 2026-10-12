@@ -1,12 +1,12 @@
 # AI Usage Log: Jayashan Guruge (Member 3)
 
-Role: ML Engineer, advanced modelling. Owns notebooks 08, 11 and 12. See
+Role: ML Engineer, advanced modelling. Owns notebooks 08 and 11. See
 [`../docs/team/member-3-jayashan-guruge.md`](../docs/team/member-3-jayashan-guruge.md).
 
 ## Tool used
 
 **Codex** (OpenAI). Used for code drafting, debugging and explanations in this member's
-areas: XGBoost tuning, model comparison, calibration and threshold choice. Policy:
+areas: XGBoost tuning and model comparison. Policy:
 [`README.md`](README.md).
 
 ## Session log

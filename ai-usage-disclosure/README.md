@@ -7,9 +7,17 @@ tools were used, by whom, and what was checked before it was trusted.
 
 ## Contribution statement
 
-All four members contributed equally to this project. Each member owns one model, at
-least one shared pipeline stage and one part of the report (see
+Each member owns one model, at least one shared pipeline stage and one part of the
+report, and has reviewed and can explain the notebooks they own (see
 [`../docs/team/roles-and-raci.md`](../docs/team/roles-and-raci.md)).
+
+- **Bhanuka** wrote the first data ingestion, quality, leakage and EDA notebook.
+- **Seneja** wrote the first split and preprocessing notebooks.
+- **Jayashan** set up the project environment and owns the XGBoost and model
+  comparison notebooks.
+- **Hasitha** designed the workflow and the instructions, and, because the timeline
+  was strict, rebuilt the final pipeline (notebooks 01 to 14) with Claude Code from the
+  earlier notebooks, then made the corrections.
 
 ## AI tools used, by member
 
@@ -17,7 +25,7 @@ least one shared pipeline stage and one part of the report (see
 |---|---|---|---|
 | Bhanuka Samarasinghe | Antigravity | Data ingestion, quality audit and EDA code; logistic regression | [member-1-bhanuka-samarasinghe.md](member-1-bhanuka-samarasinghe.md) |
 | Seneja Ramanayake | Antigravity | Train/Dev/Test split and preprocessing pipeline code; tree models | [member-2-seneja-ramanayake.md](member-2-seneja-ramanayake.md) |
-| Jayashan Guruge | Codex | XGBoost tuning; model evaluation and threshold work | [member-3-jayashan-guruge.md](member-3-jayashan-guruge.md) |
+| Jayashan Guruge | Codex | XGBoost tuning; model comparison | [member-3-jayashan-guruge.md](member-3-jayashan-guruge.md) |
 | Hasitha Erandika | Claude Code | Documentation scaffold, the notebook-only rebuild (notebooks 01 to 14), validation, final audit | [member-4-hasitha-erandika.md](member-4-hasitha-erandika.md) |
 
 The current notebooks 01 to 14 were rebuilt with Claude Code on 2026-10-11, starting
