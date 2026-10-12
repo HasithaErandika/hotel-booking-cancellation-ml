@@ -27,7 +27,7 @@ per distinct use**, not one row per project. Keep it current — log as you go.
 
 ## What must be logged
 
-- Any AI help drafting or debugging code that ends up in `src/` or `notebooks/`.
+- Any AI help drafting or debugging code that ends up in `notebooks/`.
 - Any AI help drafting documentation text (including if a whole doc's structure
   was AI-scaffolded, like the initial `docs/` skeleton for this project).
 - Any AI explanation of a statistical/ML concept that informed a decision in

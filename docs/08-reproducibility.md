@@ -82,21 +82,20 @@
 
 ## 8.5 AI-use transparency
 
-Full, per-member logs of how and why generative AI tools were used are kept in
-[`../ai-usage-disclosure/`](../ai-usage-disclosure/), not summarised away here.
-Policy summary:
+All four members contributed equally to this project. Full per-member logs are kept in
+[`../ai-usage-disclosure/`](../ai-usage-disclosure/).
 
-> Generative AI tools were used as a supporting tool for tasks such as
-> brainstorming the business-problem framing, explaining statistical/ML concepts,
-> scaffolding documentation structure, drafting boilerplate code, and assisting
-> with debugging. All dataset analysis, actual model training, interpretation of
-> results, and final conclusions were reviewed and validated by the team member
-> responsible for that section before being included in the project. AI-generated
-> suggestions were treated as a draft or a second opinion, never as evidence or a
-> finding in their own right without independent verification against the actual
-> data or code output.
+| Member | AI tool |
+|---|---|
+| Bhanuka Samarasinghe | Antigravity |
+| Seneja Ramanayake | Antigravity |
+| Jayashan Guruge | Codex |
+| Hasitha Erandika | Claude Code |
 
-Each member's individual log (what tool, what for, what was verified) is required
-under [`../ai-usage-disclosure/ai-usage-log-template.md`](../ai-usage-disclosure/ai-usage-log-template.md)
-and must be kept current throughout the project, not written retroactively at
-submission time.
+AI tools were used to draft and debug code, explain statistical and ML ideas, scaffold
+the docs and edit prose. The largest single use was the 2026-10-11 rebuild of the
+pipeline into notebooks 01 to 14 with Claude Code, starting from the members' earlier
+notebooks. Every reported number comes from running the notebooks on the real data and
+traces to a file in `reports/tables/` or `artifacts/`. The member who owns each notebook
+or section reviewed it and is accountable for it. AI output was treated as a draft,
+never as evidence on its own.
